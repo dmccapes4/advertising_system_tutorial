@@ -65,6 +65,16 @@ DOCS = [
      "html/08_bayesian_schemas_explainer.html"),
 ]
 
+# HTML-only self-check. No markdown pane; opens full-width under the Foundation
+# section. Scores live only in the page (nothing saved or sent).
+QUIZ = {
+    "num": "Q",
+    "title": "Foundation Self-Check Quiz",
+    "tier": "Foundation",
+    "blurb": "Multiple choice over both foundation docs. Wrong answer \u2192 explanation, then retry. Nothing is scored or saved.",
+    "companion": "html/foundation_quiz.html",
+}
+
 ABSTRACT = (
     "Python for the Claude Certified Architect \u2014 Foundations exam. Not Python to pass "
     "the exam \u2014 Python to absorb Skilljar without getting lost in syntax. Running example: "
@@ -129,6 +139,26 @@ def build():
         })
         print(f"  rendered {mdfile}  (companion: {comp or 'none'})")
 
+    # Quiz: HTML-only card embedded like a companion (no markdown template).
+    # Inserted right after the last Foundation card so it sits below the
+    # foundation docs it tests.
+    q_path = HERE / QUIZ["companion"]
+    if q_path.exists():
+        payload = json.dumps(q_path.read_text(encoding="utf-8")).replace("</", "<\\/")
+        companions.append(
+            f'<script type="application/json" id="comp-{QUIZ["num"]}">{payload}</script>'
+        )
+        insert_at = max(
+            (i for i, c in enumerate(cards) if c["tier"] == "Foundation"), default=-1
+        ) + 1
+        cards.insert(insert_at, {
+            "num": QUIZ["num"], "title": QUIZ["title"], "tier": QUIZ["tier"],
+            "blurb": QUIZ["blurb"], "companion": QUIZ["companion"], "quiz": True,
+        })
+        print(f"  embedded {QUIZ['companion']}  (quiz card)")
+    else:
+        print(f"  ! missing {QUIZ['companion']} \u2014 quiz card skipped")
+
     # Group cards by tier for the home list.
     tiers_order = ["Foundation", "Overview", "Modules", "Integration"]
     list_html = []
@@ -141,20 +171,25 @@ def build():
             f'<span class="tier-note">{html.escape(TIER_NOTE[tier])}</span></div>'
         )
         for c in group:
+            is_quiz = c.get("quiz")
+            card_cls = "doc-card quiz-card" if is_quiz else "doc-card"
+            badge_cls = "badge t-quiz" if is_quiz else f"badge t-{tier.lower()}"
+            go_label = "Take quiz &rarr;" if is_quiz else "Read &rarr;"
             list_html.append(
-                f'<a class="doc-card" href="#{c["num"]}" data-internal="1">'
-                f'<span class="badge t-{tier.lower()}">{c["num"]}</span>'
+                f'<a class="{card_cls}" href="#{c["num"]}" data-internal="1">'
+                f'<span class="{badge_cls}">{c["num"]}</span>'
                 f'<span class="doc-text"><b>{html.escape(c["title"])}</b>'
                 f'<small>{html.escape(c["blurb"])}</small></span>'
-                f'<span class="go">Read &rarr;</span></a>'
+                f'<span class="go">{go_label}</span></a>'
             )
 
-    # Doc meta for JS (number -> title + companion path).
+    # Doc meta for JS (number -> title + companion path + quiz flag).
     meta = ",".join(
-        '"{n}":{{"title":{t},"companion":{c}}}'.format(
+        '"{n}":{{"title":{t},"companion":{c},"quiz":{q}}}'.format(
             n=c["num"],
             t=_jsstr(c["title"]),
             c=_jsstr(c["companion"]),
+            q=("true" if c.get("quiz") else "false"),
         )
         for c in cards
     )
@@ -210,6 +245,10 @@ PAGE = r"""<!DOCTYPE html>
   .badge.t-foundations{color:var(--blue);border-color:var(--blue)}
   .badge.t-mvp{color:var(--green);border-color:var(--green)}
   .badge.t-vision{color:var(--purple);border-color:var(--purple)}
+  .badge.t-quiz{color:var(--amber);border-color:var(--amber)}
+  .quiz-card{border-style:dashed}
+  .quiz-card:hover{border-color:var(--amber);background:#221d12}
+  .quiz-card:hover .go{color:var(--amber)}
   .doc-text{flex:1;display:flex;flex-direction:column;gap:3px}
   .doc-text b{font-size:16px} .doc-text small{color:var(--muted);font-size:13px}
   .go{flex:0 0 auto;color:var(--muted);font-size:13px;font-weight:600}
@@ -231,9 +270,11 @@ PAGE = r"""<!DOCTYPE html>
   .bar .spacer{flex:1}
   .panes{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:0}
   .panes.solo{grid-template-columns:1fr}
+  .panes.full-right{grid-template-columns:1fr}
   .pane{min-height:0;overflow:auto}
   .pane.left{border-right:1px solid var(--border)}
   .panes.solo .pane.right{display:none}
+  .panes.full-right .pane.left{display:none}
   .pane-head{position:sticky;top:0;background:rgba(13,17,23,.92);backdrop-filter:blur(4px);
     border-bottom:1px solid var(--border);padding:8px 22px;font-size:11px;text-transform:uppercase;
     letter-spacing:1.2px;color:var(--muted);z-index:5}
@@ -311,7 +352,7 @@ PAGE = r"""<!DOCTYPE html>
       <div class="md" id="mdpane"></div>
     </div>
     <div class="pane right">
-      <div class="pane-head">The picture</div>
+      <div class="pane-head" id="rightHead">The picture</div>
       <iframe id="frame" title="explainer"></iframe>
     </div>
   </div>
@@ -369,15 +410,19 @@ function resetScroll(){
 
 function showDoc(num){
   current = num;
+  const isQuiz = !!(META[num] && META[num].quiz);
   document.getElementById('vnum').textContent = num + ' \u00b7 ';
   document.getElementById('vtitle').textContent = META[num].title;
+  document.getElementById('rightHead').textContent = isQuiz ? 'Self-check quiz' : 'The picture';
   const md = document.getElementById('mdpane');
-  md.innerHTML = tmpl(num);
-  renderMermaid(md);
+  md.innerHTML = isQuiz ? '' : tmpl(num);     // quiz has no markdown pane
+  if(!isQuiz) renderMermaid(md);
 
   const frame = document.getElementById('frame');
   const panes = document.getElementById('panes');
   const embed = document.getElementById('comp-'+num);
+  // Quiz fills the whole viewer; docs keep the writing|picture split.
+  panes.classList.toggle('full-right', isQuiz);
   if(embed){
     // Inline payload — no file load, works offline / from a zip / any browser.
     frame.srcdoc = JSON.parse(embed.textContent);

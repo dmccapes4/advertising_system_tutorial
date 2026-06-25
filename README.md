@@ -17,6 +17,8 @@ Foundations (CCA-F)** exam. Teaches the Python needed to read Skilljar course co
 Two steps: **(1)** set up the named venv + deps for your OS, **(2)** build and read. Pick the row
 for your system — the helper scripts are idempotent (safe to re-run) and create your `.env` for you.
 
+> If you run into issues simply double-click index.html. The mermaid diagrams may not render, but all material will.
+
 ### Step 1 — set up the venv (choose your OS)
 
 | OS / shell | Command (run from this folder) |

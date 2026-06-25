@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Overview — Visual</title>
+<style>
+  :root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--blue:#58a6ff;--green:#3fb950;--amber:#d29922}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;line-height:1.55}
+  .wrap{max-width:900px;margin:0 auto;padding:32px 20px 60px}
+  .tag{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--amber);border:1px solid var(--amber);border-radius:999px;padding:2px 10px;display:inline-block;margin-bottom:12px}
+  h1{font-size:24px;margin:0 0 8px} .sub{color:var(--muted);font-size:14px;max-width:680px}
+  .venv{margin-top:20px;padding:14px;background:rgba(63,185,80,.1);border:1px solid var(--green);border-radius:10px;font-size:13px}
+  pre{margin:8px 0 0;font-size:12px;color:var(--muted)}
+  .pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:24px;justify-content:center}
+  .box{border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;background:var(--panel)}
+  .arr{color:var(--muted)} .hi{border-color:var(--green);color:var(--green)}
+  footer{margin-top:36px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="tag">Module 00</span>
+  <h1>Overview + setup</h1>
+  <p class="sub">CCA-F tests architecture; Skilljar needs Python. Running example: <b>10-book RAG</b> → Module 8 <b>score keeping</b>.</p>
+
+  <div class="venv">
+    <b>Name your venv</b> — not <code>.venv</code>
+    <pre>python -m venv aja-cca-f && source aja-cca-f/bin/activate</pre>
+  </div>
+
+  <div class="pipe">
+    <span class="box">Agent</span><span class="arr">→</span>
+    <span class="box hi">advertising_knowledge</span><span class="arr">→</span>
+    <span class="box">briefing</span><span class="arr">→</span>
+    <span class="box">Decision</span><span class="arr">→</span>
+    <span class="box">Feedback</span><span class="arr">→</span>
+    <span class="box hi">α/β update</span>
+  </div>
+  <footer>8 modules · dataclass contracts · named venvs</footer>
+</div>
+</body>
+</html>

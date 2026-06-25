@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Functions & Tools — Visual</title>
+<style>
+  :root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--blue:#58a6ff;--red:#f85149;--green:#3fb950;--amber:#d29922}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;line-height:1.55}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 60px}
+  h1{font-size:22px;margin:0 0 8px} h2{font-size:14px;color:var(--amber);margin:24px 0 10px;text-transform:uppercase;letter-spacing:.5px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.cols{grid-template-columns:1fr}}
+  .card{border-radius:10px;padding:14px;font-size:13px;background:var(--panel);border:1px solid var(--border)}
+  .card.a{border-color:var(--blue)} .card.b{border-color:var(--green)}
+  .card h3{margin:0 0 8px;font-size:14px;color:var(--text)}
+  pre{margin:8px 0 0;font-size:11px;white-space:pre-wrap;color:var(--muted);background:#0d1117;padding:10px;border-radius:8px}
+  .note{font-size:13px;color:var(--muted);margin-top:14px;padding:12px;border-left:3px solid var(--amber);background:rgba(210,153,34,.08);border-radius:0 8px 8px 0}
+  footer{margin-top:24px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Module 3 — Tools: import a function vs run a file</h1>
+
+  <div class="cols">
+    <div class="card a">
+      <h3>Path A — import</h3>
+      <pre>from advertising_knowledge import advertising_knowledge
+
+result = advertising_knowledge("fair use")</pre>
+      <p style="color:var(--muted);margin:8px 0 0">Agent / MCP calls the <code>def</code>. <code>__main__</code> block does <b>not</b> run.</p>
+    </div>
+    <div class="card b">
+      <h3>Path B — run file</h3>
+      <pre>python advertising_knowledge.py "fair use"
+
+if __name__ == "__main__":
+    ...</pre>
+      <p style="color:var(--muted);margin:8px 0 0">CLI / operator. <code>__name__ == "__main__"</code> → script entry.</p>
+    </div>
+  </div>
+
+  <div class="note">Same <code>.py</code> file, two doors. MCP tools = Path A. Terminal smoke test = Path B.</div>
+
+  <h2>MCP — expose the function to Claude Desktop / Cursor</h2>
+  <pre>@mcp.tool()
+def advertising_knowledge(query: str) -> dict:
+    return _advertising_knowledge(query)</pre>
+
+  <h2>User asks → who runs what?</h2>
+  <p style="color:var(--muted);font-size:13px;line-height:1.6">
+    <b>1.</b> Host sends user message + tool list to Claude<br/>
+    <b>2.</b> Claude returns <code>tool_use</code> (request — no Python yet)<br/>
+    <b>3.</b> Host calls MCP <code>tools/call</code> → your <code>server.py</code> runs the function<br/>
+    <b>4.</b> Host sends <code>tool_result</code> back to Claude<br/>
+    <b>5.</b> Claude <code>end_turn</code> → user sees the answer
+  </p>
+  <p style="color:var(--muted);font-size:13px;margin-top:8px">Model <b>activates</b> the tool · Host <b>executes</b> it · See md for full diagram.</p>
+
+  <h2>Docstrings — which tool would Claude pick?</h2>
+  <div class="cols">
+    <div class="card" style="border-color:var(--red)">
+      <h3 style="color:var(--red)">Vague</h3>
+      <pre>def analyze_content(text): ...</pre>
+    </div>
+    <div class="card" style="border-color:var(--green)">
+      <h3 style="color:var(--green)">Clear</h3>
+      <pre>def search_ad_library(query: str) -> dict:
+    """10-book ad library. Use for: copy, compliance."""</pre>
+    </div>
+  </div>
+
+  <footer>Pair with: md/03_FUNCTIONS_TYPE_HINTS_TOOLS.md</footer>
+</div>
+</body>
+</html>

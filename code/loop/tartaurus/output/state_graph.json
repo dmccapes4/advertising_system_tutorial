@@ -1,0 +1,41 @@
+{
+  "nodes": {
+    "route_20260623_033441": {
+      "stage": "route",
+      "timestamp": "2026-06-23T03:34:41.907599+00:00",
+      "summary": "['Retention Machines', 'Lifecycle Email']"
+    },
+    "probe_20260623_033441": {
+      "stage": "probe",
+      "timestamp": "2026-06-23T03:34:41.909989+00:00",
+      "summary": "['Retention Machines', 'Lifecycle Email']"
+    },
+    "gap_20260623_033441": {
+      "stage": "gap",
+      "timestamp": "2026-06-23T03:34:41.912020+00:00",
+      "summary": "['Retention Machines', 'Lifecycle Email']"
+    },
+    "synthesize_20260623_033441": {
+      "stage": "synthesize",
+      "timestamp": "2026-06-23T03:34:41.913852+00:00",
+      "summary": "Advertising knowledge briefing (cited):\n\n- [Retention Machines p.60] Post-purchase email within 24h sets retention trajectory."
+    }
+  },
+  "edges": [
+    {
+      "from": "route_20260623_033441",
+      "to": "probe_20260623_033441",
+      "type": "next_stage"
+    },
+    {
+      "from": "probe_20260623_033441",
+      "to": "gap_20260623_033441",
+      "type": "next_stage"
+    },
+    {
+      "from": "gap_20260623_033441",
+      "to": "synthesize_20260623_033441",
+      "type": "next_stage"
+    }
+  ]
+}

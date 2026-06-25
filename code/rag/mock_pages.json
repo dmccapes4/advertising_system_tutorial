@@ -1,0 +1,10 @@
+[
+  {"book": "Breakthrough Copy", "page": 42, "text": "The headline must stop the scroll without misleading the offer.", "topics": ["headlines", "hooks"]},
+  {"book": "Breakthrough Copy", "page": 88, "text": "Specificity beats cleverness: numbers, timeframes, and named outcomes.", "topics": ["copywriting"]},
+  {"book": "The Legal Ad", "page": 15, "text": "Fair use in advertising is narrow; assume you need license for recognizable assets.", "topics": ["fair use", "copyright"]},
+  {"book": "The Legal Ad", "page": 31, "text": "Disclaimers must be proximate to the claim they qualify, not buried in footer.", "topics": ["compliance", "disclaimers"]},
+  {"book": "Retention Machines", "page": 60, "text": "Post-purchase email within 24h sets retention trajectory.", "topics": ["retention", "email"]},
+  {"book": "Audience First", "page": 22, "text": "Define the buyer's anxious question before writing a single line of copy.", "topics": ["audience", "targeting"]},
+  {"book": "Scaling Spend", "page": 10, "text": "Scale only after stable CPA over 7-day window; variance kills ROAS.", "topics": ["scaling", "ROAS"]},
+  {"book": "Offer Architecture", "page": 55, "text": "Stack value visibly; the anchor price frames the deal.", "topics": ["offers", "pricing"]}
+]

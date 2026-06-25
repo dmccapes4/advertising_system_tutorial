@@ -1,0 +1,17 @@
+# Named venv (we use aja-cca-f, never .venv) — and any venv, just in case.
+aja-cca-f/
+*venv*/
+.venv/
+
+# Secrets — commit .env.example, never .env
+.env
+
+# Python caches / build
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+
+# OS cruft
+.DS_Store
+Thumbs.db

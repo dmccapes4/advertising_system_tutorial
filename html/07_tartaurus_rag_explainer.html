@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RAG + TartaurusLoop — Visual</title>
+<style>
+  :root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--blue:#58a6ff;--green:#3fb950;--amber:#d29922;--purple:#bc8cff}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;line-height:1.55}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 60px}
+  h1{font-size:22px;margin:0 0 8px} .sub{color:var(--muted);font-size:14px}
+  .stages{display:flex;flex-direction:column;gap:8px;margin-top:20px;align-items:center}
+  .st{border:1px solid var(--border);border-radius:10px;padding:12px 20px;width:min(100%,420px);text-align:center;font-size:13px;background:var(--panel)}
+  .st b{display:block;color:var(--blue);margin-bottom:4px}
+  .st.t4{border-color:var(--green);background:rgba(63,185,80,.1)}
+  .arr{color:var(--muted);font-size:18px}
+  .tl{margin-top:24px;border:1px solid var(--purple);border-radius:10px;padding:14px;font-size:13px;background:rgba(188,140,255,.08)}
+  .tl h3{margin:0 0 8px;font-size:14px;color:var(--purple)}
+  pre{font-size:11px;color:var(--muted);margin:8px 0 0}
+  footer{margin-top:28px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Module 7 — 10-book RAG + TartaurusLoop</h1>
+  <p class="sub">Staged reduction as Tartaurus stages. Slim Anthropic variant in <code>code/loop/tartaurus/</code></p>
+
+  <div class="stages">
+    <div class="st"><b>ROUTE</b>library_dictionary.json → pick books</div>
+    <div class="arr">↓</div>
+    <div class="st"><b>PROBE</b>keyword + semantic per book</div>
+    <div class="arr">↓</div>
+    <div class="st"><b>GAP</b>missing topics → targeted fetch</div>
+    <div class="arr">↓</div>
+    <div class="st t4"><b>SYNTHESIZE</b>cited briefing → agent</div>
+  </div>
+
+  <div class="tl">
+    <h3>TartaurusLoop per stage</h3>
+    SPECIFY → VALIDATE → INTEGRATE · checklist.json · session_log.json · state_graph.json
+    <pre>python run_advertising_rag.py --dry-run
+python run_advertising_rag.py --query "..." --llm-polish</pre>
+    <p style="color:var(--muted);margin:8px 0 0">Full lineage: PortalVision/FullMetalPacket + tartaurus_loop_package</p>
+  </div>
+  <footer>Pair with: md/07_TEN_BOOK_RAG_WITH_TARTAURUSLOOP.md</footer>
+</div>
+</body>
+</html>

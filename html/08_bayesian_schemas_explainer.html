@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Six-Schema Bayesian Loop — Visual</title>
+<style>
+  :root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--blue:#58a6ff;--green:#3fb950;--amber:#d29922}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;line-height:1.55}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 60px}
+  h1{font-size:22px;margin:0 0 8px} .sub{color:var(--muted);font-size:14px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+  @media(max-width:640px){.grid{grid-template-columns:1fr 1fr}}
+  .cell{border:1px solid var(--border);border-radius:8px;padding:10px;font-size:12px;background:var(--panel);text-align:center}
+  .cell b{display:block;color:var(--blue);font-size:11px;margin-bottom:4px}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;font-size:12px;margin-top:16px}
+  .box{border:1px solid var(--border);padding:8px 12px;border-radius:6px;background:var(--panel)}
+  .hyp{border-color:var(--blue)} .ev{border-color:var(--green)}
+  footer{margin-top:24px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Module 8 — Six schemas, score keeping</h1>
+  <p class="sub">Briefing = hypothesis. Metrics = evidence. <code>@dataclass</code> contracts + append-only <code>BeliefLog</code>.</p>
+
+  <div class="grid">
+    <div class="cell"><b>1</b>KnowledgeEntry<br><span style="color:var(--muted)">α, β, weight</span></div>
+    <div class="cell"><b>2</b>Edge</div>
+    <div class="cell"><b>3</b>Decision<br><span style="color:var(--muted)">hypothesis</span></div>
+    <div class="cell"><b>4</b>DecisionEntry<br><span style="color:var(--muted)">credit assign</span></div>
+    <div class="cell"><b>5</b>FeedbackEvent<br><span style="color:var(--muted)">evidence</span></div>
+    <div class="cell"><b>6</b>BeliefLog<br><span style="color:var(--muted)">receipt</span></div>
+  </div>
+
+  <div class="flow">
+    <span class="box">RAG briefing</span>→
+    <span class="box hyp">Decision</span>→
+    <span class="box">campaign</span>→
+    <span class="box ev">FeedbackEvent</span>→
+    <span class="box">α/β update</span>→
+    <span class="box">BeliefLog</span>
+  </div>
+  <footer><code>python code/schemas/bayesian_loop.py</code></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JSON & Dicts — Visual</title>
+<style>
+  :root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--blue:#58a6ff;--green:#3fb950;--amber:#d29922;--red:#f85149}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;line-height:1.55}
+  .wrap{max-width:900px;margin:0 auto;padding:32px 20px 60px}
+  h1{font-size:22px;margin:0 0 8px} h2{font-size:15px;margin:24px 0 8px;color:var(--amber)}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:12px}
+  pre{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:12px;overflow:auto;margin:8px 0 16px}
+  .note{font-size:13px;padding:12px 14px;background:rgba(88,166,255,.08);border:1px solid var(--blue);border-radius:10px;margin:8px 0}
+  .warn{font-size:13px;padding:12px 14px;background:rgba(248,81,73,.08);border:1px solid var(--red);border-radius:10px;margin:8px 0}
+  .note b{color:var(--green)} .warn b{color:var(--red)} code{background:var(--panel);padding:2px 6px;border-radius:4px;font-size:12px}
+  footer{margin-top:28px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Module 2 — JSON first</h1>
+  <p class="sub"><strong>Learn one thing: JSON.</strong> SQL is older and more important — and more tedious. JSON is easy: <code>{</code> = object, <code>"key": value</code> inside.</p>
+
+  <h2>Book object</h2>
+  <pre>{
+  "title": "Breakthrough Copy",
+  "topics": ["copywriting", "hooks"]
+}</pre>
+
+  <h2>Tool use — nested object</h2>
+  <pre>{
+  "type": "tool_use",
+  "name": "advertising_knowledge",
+  "input": { "query": "fair use in headlines" }
+}</pre>
+
+  <h2>Session log — agentic systems</h2>
+  <div class="warn"><b>No session_log → runaway loop.</b> An unbounded <code>while tool_use</code> eats RAM until the OS kills the process. <code>session_log.json</code> / <code>.jsonl</code> = audit trail + debug + don't repeat the same mistake. TartaurusLoop writes one every run.</div>
+  <p class="sub">Log = story of the run · Checklist = resume · Result = deliverable</p>
+
+  <footer>Pair with: md/02_DICTIONARIES_LISTS_JSON.md</footer>
+</div>
+</body>
+</html>

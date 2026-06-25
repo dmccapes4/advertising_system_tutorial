@@ -1,0 +1,10 @@
+# Dependencies for the AJA CCA-F tutorial.
+# Install into the NAMED venv (not .venv):
+#   source setup_venv.sh         # creates + activates aja-cca-f, then installs this
+# or manually:
+#   python -m venv aja-cca-f && source aja-cca-f/bin/activate
+#   pip install -r requirements.txt
+
+markdown>=3.5    # build_reader.py — renders modules into index.html
+anthropic>=0.40  # Modules 4, 6, 7 — Claude SDK + TartaurusLoop
+mcp>=1.2         # Module 3 MCP example — code/mcp/server.py

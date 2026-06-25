@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Foundation Quiz — AI Systems &amp; Computer Engineering</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2530; --border:#30363d;
+    --text:#e6edf3; --muted:#8b949e; --blue:#58a6ff; --green:#3fb950;
+    --amber:#d29922; --red:#f85149; --purple:#bc8cff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 700px at 18% -12%,#16202c 0%,var(--bg) 55%);
+    color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+  .wrap{max-width:840px;margin:0 auto;padding:36px 22px 90px}
+  .tag{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--blue);
+    border:1px solid var(--blue);border-radius:999px;padding:2px 10px;margin-bottom:14px;opacity:.85}
+  h1{font-size:26px;margin:0 0 6px;letter-spacing:-.5px}
+  .sub{color:var(--muted);font-size:14px;max-width:680px}
+
+  /* sticky live score */
+  .score{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:14px;
+    background:rgba(13,17,23,.92);backdrop-filter:blur(6px);border:1px solid var(--border);
+    border-radius:12px;padding:12px 16px;margin:22px 0 10px}
+  .score .big{font-size:20px;font-weight:800}
+  .score .bar{flex:1;height:8px;border-radius:6px;background:var(--panel2);overflow:hidden}
+  .score .fill{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .3s}
+  .score small{color:var(--muted);font-size:12px}
+  .score button{font:inherit;font-size:12px;font-weight:600;cursor:pointer;border-radius:8px;
+    padding:6px 11px;border:1px solid var(--border);background:var(--panel2);color:var(--text)}
+  .score button:hover{filter:brightness(1.25)}
+
+  .sec-head{font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted);
+    font-weight:700;margin:34px 0 6px;border-bottom:1px solid var(--border);padding-bottom:8px}
+
+  .q{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin:16px 0}
+  .q .qhead{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
+  .q .qnum{flex:0 0 auto;font-weight:800;color:var(--blue);font-size:14px;background:var(--panel2);
+    border:1px solid var(--border);border-radius:8px;padding:3px 9px;margin-top:1px}
+  .q .qtext{font-size:16px;font-weight:600}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{display:flex;align-items:center;gap:11px;text-align:left;width:100%;font:inherit;font-size:14.5px;
+    cursor:pointer;background:var(--panel2);border:1px solid var(--border);border-radius:10px;
+    padding:11px 13px;color:var(--text);transition:border-color .12s,background .12s}
+  .opt:hover:not(:disabled){border-color:var(--blue)}
+  .opt .mark{flex:0 0 auto;width:22px;height:22px;border-radius:50%;border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;background:var(--bg)}
+  .opt.correct{border-color:var(--green);background:rgba(63,185,80,.12)}
+  .opt.correct .mark{border-color:var(--green);color:var(--green)}
+  .opt.wrong{border-color:var(--red);background:rgba(248,81,73,.10)}
+  .opt.wrong .mark{border-color:var(--red);color:var(--red)}
+  .opt:disabled{cursor:default;opacity:.92}
+
+  .explain-btn{margin-top:12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;
+    border-radius:9px;padding:8px 14px;border:1px solid var(--amber);background:rgba(210,153,34,.12);
+    color:var(--amber)}
+  .explain-btn:hover{filter:brightness(1.2)}
+  .explanation{margin-top:12px;border-left:3px solid var(--amber);background:var(--panel2);
+    border-radius:0 9px 9px 0;padding:11px 15px;font-size:14px;color:var(--text)}
+  .explanation b{color:#fff}
+  .retry-hint{margin-top:8px;font-size:12.5px;color:var(--muted)}
+  .solved{margin-top:12px;border-left:3px solid var(--green);background:rgba(63,185,80,.08);
+    border-radius:0 9px 9px 0;padding:11px 15px;font-size:14px;color:var(--text)}
+  code{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:1px 5px;
+    font-size:12.5px;color:var(--blue);font-family:ui-monospace,Consolas,monospace}
+  .hidden{display:none}
+  footer{margin-top:40px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--border);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="tag">Session 1 · self-check</span>
+  <h1>Foundation Quiz</h1>
+  <div class="sub">Covers both foundation docs — <code>FOUNDATION_FOR_AI_SYSTEMS.md</code> and
+  <code>FOUNDATION_COMPUTER_ENGINEERING.md</code>. Pick an answer. Get it wrong and an
+  <b>Explanation</b> button appears — read it, then try again. Nothing is scored, saved, or sent
+  anywhere; the tally below lives only in this page and resets on reload.</div>
+
+  <div class="score">
+    <span class="big"><span id="got">0</span>/<span id="total">0</span></span>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <small id="msg">First try counts only — explanations are free.</small>
+    <button onclick="resetQuiz()">Reset</button>
+  </div>
+
+  <div id="quiz"></div>
+
+  <footer>Pair with: <code>md/FOUNDATION_FOR_AI_SYSTEMS.md</code> &middot;
+  <code>md/FOUNDATION_COMPUTER_ENGINEERING.md</code> &middot; no data leaves this file.</footer>
+</div>
+
+<script>
+// Each question: prompt, options[], correct index, explanation (shown after a wrong pick).
+const SECTIONS = [
+  { title: "Part A · Foundation for AI Systems", questions: [
+    {
+      q: "At bottom, what is the primary responsibility of any system?",
+      opts: [
+        "To run as fast as possible",
+        "To manage the data entrusted to it honestly",
+        "To use the largest available AI model",
+        "To avoid ever storing anything on disk"
+      ],
+      correct: 1,
+      ex: "A system is fundamentally <b>a service that persists user data</b>. Everything good or bad follows from how honestly it treats that data — drop it or mutate it without provenance and you destroy trust."
+    },
+    {
+      q: "Where does an LLM's \"knowledge\" actually live?",
+      opts: [
+        "In a searchable database of its training data",
+        "In the system prompt you send it",
+        "Baked into its weighted parameters (tensor weights)",
+        "In the context window, fetched fresh each call"
+      ],
+      correct: 2,
+      ex: "Training data shaped the <b>parameters</b> and was then effectively thrown away. The model predicts the next token across those weights — it does not look knowledge up. That's why an offline llama model can quote Shakespeare and write Python with nothing fetched."
+    },
+    {
+      q: "An agent is asked what is in its training data. What's true?",
+      opts: [
+        "It can list its training corpus on request",
+        "It does not know — there is no queryable index of its corpus",
+        "It re-reads the training data before answering",
+        "It always answers from a stored copy of the data"
+      ],
+      correct: 1,
+      ex: "The model has <b>no queryable index</b> of what it was trained on. It can sometimes reproduce memorized text, but there is no step where it reviews your context against a stored copy of the training data."
+    },
+    {
+      q: "Why can handing an agent an entire book (to use one page of it) hurt?",
+      opts: [
+        "Books are copyrighted so it refuses to read them",
+        "Every token of context is interpreted across all the weights, diluting reasoning on the actual problem",
+        "The model deletes part of its parameters to make room",
+        "It always improves reasoning — more context is strictly better"
+      ],
+      correct: 1,
+      ex: "Every context token is interpreted across all the weights, so excess context makes it <b>harder</b> for the model to reason about the real problem — often a net negative. The 10-book RAG exists to give a curated, cited briefing instead of whole books."
+    },
+    {
+      q: "You did NOT give the model a text, and it quotes a book <i>almost</i> right. This is best described as:",
+      opts: [
+        "A hallucination — pure fabrication",
+        "Proof the book is stored verbatim in the model",
+        "Next-token prediction landing close to memorized text — not fabrication",
+        "A bug in the tokenizer"
+      ],
+      correct: 2,
+      ex: "A near-miss quote means the book was in training and the model predicted each token <b>close</b> to the real text — prediction working as designed, with a small error bar. Hallucination is inventing something with <i>no</i> basis. Citing from your own library closes the gap."
+    },
+    {
+      q: "What is \"inference\" as the foundation doc defines it?",
+      opts: [
+        "Looking an answer up in a fact table",
+        "Filling a gap by predicting the most likely completion from limited signal plus prior knowledge",
+        "Copying the user's prompt back to them",
+        "Running a regex over the input"
+      ],
+      correct: 1,
+      ex: "For an LLM <b>every output is inference</b> (next-token prediction). It's powerful right up until it runs out of signal — then it bluffs. Same mechanism for people guessing past what they actually know."
+    },
+    {
+      q: "\"Precision\" in this tutorial means:",
+      opts: [
+        "Using the minimal context required to complete an operation — no more, no less",
+        "Always sending the maximum context the model allows",
+        "Asking the AI for permission before each step",
+        "Writing more detailed regular expressions"
+      ],
+      correct: 0,
+      ex: "Precision is the direct antidote to context overload: give the model <b>exactly what the task needs</b> so its reasoning lands on your problem. The mantra: <b>ask for precision, not permission.</b>"
+    },
+    {
+      q: "Calling an LLM \"heuristic-management infrastructure\" mainly means:",
+      opts: [
+        "It stores your passwords",
+        "It replaces mountains of brittle hand-written heuristics (regex, if/elif trees) so you spend effort on intent and contracts",
+        "It can only be used for chatbots",
+        "It guarantees correct output every time"
+      ],
+      correct: 1,
+      ex: "Regex becomes an optional optimization, sprawling <code>if/elif</code> trees collapse into a sentence in a system prompt, and retrieval is offloaded to an agent. You spend your effort on <b>intent and contracts</b>, not scaffolding."
+    },
+  ]},
+
+  { title: "Part B · Foundation for Computer Engineering", questions: [
+    {
+      q: "What is the kernel?",
+      opts: [
+        "The fastest CPU core",
+        "The program in charge of the hardware — others must ask it for disk, network, and memory",
+        "A type of AI model",
+        "The browser's rendering engine"
+      ],
+      correct: 1,
+      ex: "The kernel is the <b>boss of the hardware</b>. Normal programs don't touch the disk, network card, or memory directly — they ask the kernel, which grants or denies. Think building manager."
+    },
+    {
+      q: "What is a daemon?",
+      opts: [
+        "A script that runs once and exits",
+        "A program that keeps running in the background and listens for requests",
+        "A virus",
+        "A unit of VRAM"
+      ],
+      correct: 1,
+      ex: "A daemon (a \"service\" on Windows) does not exit — it enters a loop and <b>waits for connections forever</b>. Postgres, Ollama, and the tutorial's serve script are all daemons. Its first move: register a port and listen."
+    },
+    {
+      q: "Postgres and Ollama both \"register a port and listen.\" How do their core kernel asks differ?",
+      opts: [
+        "They are identical in every way",
+        "Postgres asks to read/write disk; Ollama asks to reserve a big block of VRAM for model weights",
+        "Postgres needs VRAM; Ollama needs disk only",
+        "Neither one talks to the kernel"
+      ],
+      correct: 1,
+      ex: "Same shape, different heavy resource. <b>Postgres</b> guards data on <b>disk</b>; <b>Ollama</b> loads tensor weights into <b>VRAM</b> and listens for generation requests."
+    },
+    {
+      q: "Order from fastest/smallest to slowest/biggest:",
+      opts: [
+        "Disk → RAM → VRAM",
+        "VRAM → RAM → Disk",
+        "RAM → VRAM → Disk",
+        "They are all the same speed"
+      ],
+      correct: 1,
+      ex: "<b>VRAM</b> is fastest but smallest and volatile; <b>RAM</b> is fast and medium; <b>Disk</b> is slow but huge and persistent. A model lives on disk but must load into VRAM to think."
+    },
+    {
+      q: "Why is VRAM effectively faster for AI work?",
+      opts: [
+        "Each single read has dramatically lower latency than RAM",
+        "High memory bandwidth + a wide bus feed thousands of cores in parallel — ideal for matrix math",
+        "It never needs power",
+        "It stores data permanently"
+      ],
+      correct: 1,
+      ex: "The win is <b>throughput</b>, not single-read latency: a wide bus feeds thousands of cores at once (parallel access), and GPUs specialize in <b>matrix multiplication</b> — which is exactly what model weights and inference are."
+    },
+    {
+      q: "NAT (Network Address Translation) does what?",
+      opts: [
+        "Encrypts all your traffic",
+        "Lets many private devices share one public IP by tracking conversations in a table",
+        "Assigns you a new public IP per device",
+        "Blocks all incoming and outgoing traffic"
+      ],
+      correct: 1,
+      ex: "The router rewrites outgoing packets to the public IP and remembers which private device each conversation belongs to. It handles <b>replies to conversations your devices started</b> — unsolicited inbound traffic has no table entry, so it's dropped (a free firewall)."
+    },
+    {
+      q: "On a home router, what's the single biggest real-world security risk called out in the doc?",
+      opts: [
+        "Someone snapping a photo of the gateway's device access-code sticker",
+        "Using HTTPS instead of HTTP",
+        "Naming your venv",
+        "Having more than one device on Wi-Fi"
+      ],
+      correct: 0,
+      ex: "With the access code and the router address (<code>192.168.1.254</code> on AT&amp;T) someone can open ports straight to your devices. <b>Tape over the sticker</b>, and only forward a port when you truly need to."
+    },
+    {
+      q: "A daemon is stuck on port 8000. What's a reasonable way to end it?",
+      opts: [
+        "Reinstall the operating system",
+        "Find its PID (e.g. lsof -i :8000), then kill <pid>, or kill -9 <pid> if it ignores you",
+        "Unplug the computer immediately",
+        "Nothing — daemons cannot be stopped"
+      ],
+      correct: 1,
+      ex: "A <b>PID</b> is the process ID the kernel assigns each program. <code>lsof -i :8000</code> shows who holds the port; <code>kill &lt;pid&gt;</code> asks politely; <code>kill -9 &lt;pid&gt;</code> tells the kernel to terminate it immediately. You don't need to fear daemons — you can kill them."
+    },
+    {
+      q: "HTTP vs HTTPS — the difference is:",
+      opts: [
+        "HTTPS is a totally different protocol unrelated to HTTP",
+        "HTTPS is HTTP plus encryption (a lock so nobody on the wire can read or tamper)",
+        "HTTP is faster and always preferred",
+        "There is no difference"
+      ],
+      correct: 1,
+      ex: "Same conversation; <b>HTTPS encrypts it</b>. Plain <code>http://</code> is fine for localhost / the LAN link; anything crossing the public internet should be <code>https://</code>."
+    },
+    {
+      q: "Which maps the CRUD \"Create\" operation to the right HTTP method?",
+      opts: [
+        "GET",
+        "DELETE",
+        "POST",
+        "PATCH"
+      ],
+      correct: 2,
+      ex: "CRUD = Create/Read/Update/Delete → POST / GET / PUT&PATCH / DELETE. So <code>POST /api/advertisements</code> creates a new advertisement record."
+    },
+    {
+      q: "API key vs JWT vs bearer token — which statement is right?",
+      opts: [
+        "They are three names for the same thing",
+        "An API key identifies an app/account; a JWT is a signed token holding user claims; \"bearer\" is how a token is sent in the header",
+        "A bearer token is always more secure than HTTPS",
+        "JWTs never expire"
+      ],
+      correct: 1,
+      ex: "API key = a house key (identifies the account, lives in <code>.env</code>). JWT = a signed wristband carrying claims like user + expiry. \"Bearer\" is the <b>envelope</b>: <code>Authorization: Bearer &lt;token&gt;</code> — how the token is carried, not what it is."
+    },
+    {
+      q: "Why is the knowledge-base retrieval built as an SSE stream instead of one HTTP call?",
+      opts: [
+        "SSE is the only way to talk to a database",
+        "The workflow is slow and multi-step, so one open connection pushes progress events until done",
+        "Streams are required for every web request",
+        "HTTP cannot return JSON"
+      ],
+      correct: 1,
+      ex: "<b>SSE = Server-Sent Events.</b> HTTP is one quick request/response then hang up — wrong for a slow workflow (route → search → read → generate). A stream keeps one connection open and pushes <code>start</code>, <code>status</code>, <code>matches</code>, <code>token</code>, <code>end</code> as they happen. Polling instead is the amateur move."
+    },
+    {
+      q: "Apple Unified Memory vs a discrete Nvidia GPU — a key tradeoff is:",
+      opts: [
+        "Unified memory is one large pool shared by CPU+GPU (great for big models); Nvidia wins on top-end raw bandwidth and scales by adding cards",
+        "They are identical",
+        "Nvidia GPUs share one pool with the CPU; Apple uses separate VRAM",
+        "Unified memory cannot run AI models at all"
+      ],
+      correct: 0,
+      ex: "Apple's one big shared pool (e.g. 192&nbsp;GB on M2 Ultra) can hold a large <i>and</i> a small model at once with no copy. Nvidia has separate VRAM with the highest top-end bandwidth and scales horizontally by adding cards."
+    },
+    {
+      q: "One box is overloaded by streams + heavy DB scans. Which trio are the classic ways out?",
+      opts: [
+        "Delete data, ignore users, restart hourly",
+        "Queue (e.g. RabbitMQ), schedule (e.g. overnight cron), and scale (another node / cloud compute)",
+        "Buy a faster monitor, more RAM only, and a louder fan",
+        "Switch from HTTPS to HTTP"
+      ],
+      correct: 1,
+      ex: "A <b>queue</b> turns \"everyone at once\" into \"everyone in turn\"; a <b>schedule</b> moves heavy non-urgent work off peak (3 a.m. cron); <b>scaling</b> adds hardware. Heavy inference + big sequential DB scans both draw on the same memory and erode it."
+    },
+    {
+      q: "MD vs HTML, as used by this very tutorial:",
+      opts: [
+        "They are the same format",
+        "Markdown is human-friendly plain text; HTML is the rendered tag form — a tool converts .md → .html (the left text, the right visuals)",
+        "HTML is simpler to write than Markdown",
+        "Markdown can only be read by browsers"
+      ],
+      correct: 1,
+      ex: "Each module is authored as <b>Markdown on the left</b> (in <code>md/</code>) and paired with a hand-built <b>HTML explainer on the right</b> (in <code>html/</code>). <code>build_reader.py</code> converts and assembles them. (HTTP <i>transfers</i> the HTML; HTML is the content.)"
+    },
+  ]},
+];
+
+const quiz = document.getElementById('quiz');
+let total = 0;
+
+SECTIONS.forEach((sec, si) => {
+  const h = document.createElement('div');
+  h.className = 'sec-head';
+  h.textContent = sec.title;
+  quiz.appendChild(h);
+
+  sec.questions.forEach((item) => {
+    total++;
+    const qi = total;
+    const card = document.createElement('div');
+    card.className = 'q';
+    card.dataset.firstTry = '1';   // becomes 0 the moment a wrong answer is clicked
+    card.dataset.solved = '0';
+
+    const head = document.createElement('div');
+    head.className = 'qhead';
+    head.innerHTML = '<span class="qnum">' + qi + '</span><span class="qtext">' + item.q + '</span>';
+    card.appendChild(head);
+
+    const opts = document.createElement('div');
+    opts.className = 'opts';
+    item.opts.forEach((text, oi) => {
+      const b = document.createElement('button');
+      b.className = 'opt';
+      b.innerHTML = '<span class="mark">' + String.fromCharCode(65 + oi) + '</span><span>' + text + '</span>';
+      b.onclick = () => choose(card, item, b, oi);
+      opts.appendChild(b);
+    });
+    card.appendChild(opts);
+
+    // Explanation button (hidden until a wrong answer)
+    const exBtn = document.createElement('button');
+    exBtn.className = 'explain-btn hidden';
+    exBtn.textContent = 'Explanation';
+    exBtn.onclick = () => revealExplanation(card, item, exBtn);
+    card.appendChild(exBtn);
+
+    quiz.appendChild(card);
+  });
+});
+
+document.getElementById('total').textContent = total;
+updateScore();
+
+function choose(card, item, btn, idx){
+  if(card.dataset.solved === '1') return;          // already correct; locked
+  const buttons = card.querySelectorAll('.opt');
+
+  if(idx === item.correct){
+    btn.classList.add('correct');
+    btn.querySelector('.mark').textContent = '\u2713';
+    buttons.forEach(b => b.disabled = true);
+    card.dataset.solved = '1';
+    // Replace any explanation prompt with a solved note.
+    const exBtn = card.querySelector('.explain-btn');
+    if(exBtn) exBtn.classList.add('hidden');
+    removeNode(card.querySelector('.explanation'));
+    removeNode(card.querySelector('.retry-hint'));
+    if(!card.querySelector('.solved')){
+      const ok = document.createElement('div');
+      ok.className = 'solved';
+      ok.innerHTML = (card.dataset.firstTry === '1')
+        ? '<b>Correct \u2014 first try.</b> ' + item.ex
+        : '<b>Correct.</b> ' + item.ex;
+      card.appendChild(ok);
+    }
+    updateScore();
+  } else {
+    // Wrong: mark it, lock everything, surface the Explanation button.
+    card.dataset.firstTry = '0';                   // no longer counts toward score
+    btn.classList.add('wrong');
+    btn.querySelector('.mark').textContent = '\u2717';
+    buttons.forEach(b => b.disabled = true);
+    card.querySelector('.explain-btn').classList.remove('hidden');
+    updateScore();
+  }
+}
+
+function revealExplanation(card, item, exBtn){
+  if(!card.querySelector('.explanation')){
+    const ex = document.createElement('div');
+    ex.className = 'explanation';
+    ex.innerHTML = '<b>Why:</b> ' + item.ex;
+    card.insertBefore(ex, exBtn.nextSibling);
+    const hint = document.createElement('div');
+    hint.className = 'retry-hint';
+    hint.textContent = 'Now pick another answer \u2014 this one no longer counts toward your first-try tally.';
+    card.appendChild(hint);
+  }
+  exBtn.classList.add('hidden');
+  // Re-open the options so the user can try again (keep the wrong one marked).
+  card.querySelectorAll('.opt').forEach(b => {
+    if(!b.classList.contains('wrong')) b.disabled = false;
+  });
+}
+
+function removeNode(n){ if(n && n.parentNode) n.parentNode.removeChild(n); }
+
+function updateScore(){
+  let got = 0;
+  document.querySelectorAll('.q').forEach(c => {
+    if(c.dataset.solved === '1' && c.dataset.firstTry === '1') got++;
+  });
+  document.getElementById('got').textContent = got;
+  const pct = total ? Math.round(100 * got / total) : 0;
+  document.getElementById('fill').style.width = pct + '%';
+  const msg = document.getElementById('msg');
+  if(got === total) msg.textContent = 'Perfect \u2014 every question right on the first try.';
+  else msg.textContent = 'First try counts only \u2014 explanations are free.';
+}
+
+function resetQuiz(){
+  document.querySelectorAll('.q').forEach(card => {
+    card.dataset.firstTry = '1';
+    card.dataset.solved = '0';
+    card.querySelectorAll('.opt').forEach((b, i) => {
+      b.classList.remove('correct','wrong');
+      b.disabled = false;
+      b.querySelector('.mark').textContent = String.fromCharCode(65 + i);
+    });
+    card.querySelector('.explain-btn').classList.add('hidden');
+    removeNode(card.querySelector('.explanation'));
+    removeNode(card.querySelector('.retry-hint'));
+    removeNode(card.querySelector('.solved'));
+  });
+  updateScore();
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

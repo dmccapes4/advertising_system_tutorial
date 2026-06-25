@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agentic Loop — Visual</title>
+<style>
+  :root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--blue:#58a6ff;--green:#3fb950;--amber:#d29922}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;line-height:1.55}
+  .wrap{max-width:900px;margin:0 auto;padding:32px 20px 60px}
+  h1{font-size:22px;margin:0 0 8px} .sub{color:var(--muted);font-size:14px}
+  .loop{border:2px dashed var(--amber);border-radius:16px;padding:24px;margin-top:20px;position:relative}
+  .step{border:1px solid var(--border);background:var(--panel);border-radius:8px;padding:12px;margin:10px 0;font-size:13px}
+  .step b{color:var(--blue)} .exit{margin-top:16px;padding:12px;border:1px solid var(--green);border-radius:8px;color:var(--green);font-size:13px}
+  pre{background:#0a0e14;border:1px solid var(--border);border-radius:8px;padding:12px;font-size:11px;overflow:auto;margin-top:16px}
+  footer{margin-top:24px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Module 4 — The agentic loop</h1>
+  <p class="sub">Domain 1 (27%): literally <code>while</code> + <code>if stop_reason == "tool_use"</code></p>
+  <div class="loop">
+    <div class="step"><b>1.</b> Claude responds — maybe with <code>tool_use</code></div>
+    <div class="step"><b>2.</b> Your code runs <code>advertising_knowledge(...)</code></div>
+    <div class="step"><b>3.</b> Send <code>tool_result</code> back in <code>messages</code></div>
+    <div class="step"><b>4.</b> Call <code>messages.create</code> again → loop</div>
+  </div>
+  <div class="exit">Exit when <code>stop_reason == "end_turn"</code> — always cap max iterations!</div>
+  <pre>while response.stop_reason == "tool_use":
+    ... execute tools ...
+    response = client.messages.create(...)</pre>
+  <p class="sub">See <code>code/loop/anthropic_agent_loop.py</code> — TartaurusLoop wraps this in Module 7.</p>
+  <footer>Pair with: md/04_CONTROL_FLOW_AND_THE_AGENTIC_LOOP.md</footer>
+</div>
+</body>
+</html>

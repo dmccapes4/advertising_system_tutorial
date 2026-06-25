@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SDK & Env Vars — Visual</title>
+<style>
+  :root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--blue:#58a6ff;--green:#3fb950;--red:#f85149}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;line-height:1.55}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 60px}
+  h1{font-size:22px;margin:0 0 8px} h2{font-size:13px;text-transform:uppercase;color:var(--muted);margin:24px 0 10px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.cols{grid-template-columns:1fr}}
+  .card{border:1px solid var(--border);border-radius:10px;padding:14px;background:var(--panel);font-size:13px}
+  .card.good{border-color:var(--green)} .card.warn{border-color:var(--red)}
+  pre{background:#0a0e14;border:1px solid var(--border);border-radius:8px;padding:12px;font-size:11px;margin:8px 0 0;overflow:auto}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px;font-size:12px}
+  .box{border:1px solid var(--border);padding:8px 12px;border-radius:6px;background:var(--panel)}
+  footer{margin-top:28px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Module 6 — Keys, env vars, SDK flow</h1>
+
+  <h2>Where the API key lives</h2>
+  <div class="cols">
+    <div class="card good">
+      <b>.env</b> (local, gitignored)
+      <pre>ANTHROPIC_API_KEY=sk-ant-...
+# copy from .env.example</pre>
+      <p style="color:var(--muted);margin:8px 0 0">Loaded by <code>code/env_loader.py</code></p>
+    </div>
+    <div class="card good">
+      <b>export</b> (shell session)
+      <pre>export ANTHROPIC_API_KEY="sk-ant-..."
+echo $ANTHROPIC_API_KEY</pre>
+      <p style="color:var(--muted);margin:8px 0 0">WSL / macOS / Linux</p>
+    </div>
+  </div>
+  <div class="card warn" style="margin-top:14px">
+    <b>Don't</b> put keys in markdown notes or Python source. Rotate if exposed.
+  </div>
+
+  <h2>SDK message flow</h2>
+  <div class="flow">
+    <span class="box">user message</span>→
+    <span class="box">messages.create</span>→
+    <span class="box">tool_use?</span>→
+    <span class="box">tool_result</span>→
+    <span class="box">loop</span>→
+    <span class="box">end_turn</span>
+  </div>
+  <footer>Walkthrough: code/loop/anthropic_agent_loop.py</footer>
+</div>
+</body>
+</html>

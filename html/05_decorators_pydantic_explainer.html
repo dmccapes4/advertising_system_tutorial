@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Decorators & Pydantic — Visual</title>
+<style>
+  :root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--blue:#58a6ff;--purple:#bc8cff}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;line-height:1.55}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 60px}
+  h1{font-size:22px;margin:0 0 16px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.cols{grid-template-columns:1fr}}
+  .card{border:1px solid var(--border);border-radius:10px;padding:14px;background:var(--panel);font-size:12px}
+  .card h3{margin:0 0 8px;font-size:13px;color:var(--purple)}
+  pre{margin:0;white-space:pre-wrap;color:var(--muted)}
+  footer{margin-top:24px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Module 5 — OOP, decorators, Pydantic</h1>
+  <div class="cols">
+    <div class="card">
+      <h3>MCP decorator</h3>
+      <pre>@server.tool()
+def advertising_knowledge(query: str):
+    """Search 10-book library..."""</pre>
+      <p style="color:var(--muted);margin:8px 0 0"><code>@</code> = register as tool</p>
+    </div>
+    <div class="card">
+      <h3>Pydantic = JSON schema</h3>
+      <pre>class AdRequest(BaseModel):
+    query: str
+    top_k: int = 5</pre>
+      <p style="color:var(--muted);margin:8px 0 0">Same as hand-written schema, less error-prone</p>
+    </div>
+  </div>
+  <footer>Domain 2.4 MCP · Domain 4.3–4.4 structured output</footer>
+</div>
+</body>
+</html>

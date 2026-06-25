@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Foundation for Computer Engineering — Visual</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2530; --border:#30363d;
+    --text:#e6edf3; --muted:#8b949e; --blue:#58a6ff; --green:#3fb950;
+    --amber:#d29922; --red:#f85149; --purple:#bc8cff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#16202c 0%,var(--bg) 55%);
+    color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+  .wrap{max-width:920px;margin:0 auto;padding:36px 22px 70px}
+  .tag{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--blue);
+    border:1px solid var(--blue);border-radius:999px;padding:2px 10px;margin-bottom:14px;opacity:.85}
+  h1{font-size:25px;margin:0 0 6px;letter-spacing:-.5px}
+  h2{font-size:15px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:34px 0 14px;font-weight:700}
+  .sub{color:var(--muted);font-size:14px;max-width:740px}
+  .pipe{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:6px 0}
+  .step{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:13px 12px;text-align:center;position:relative}
+  .step b{display:block;font-size:13px}
+  .step small{color:var(--muted);font-size:11px}
+  .arrow{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:20px;padding:0 6px}
+  .note{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--amber);
+    border-radius:8px;padding:12px 14px;font-size:13.5px;margin:14px 0}
+  .tiers{display:flex;flex-direction:column;gap:8px;margin:6px 0}
+  .tier{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:10px;
+    background:var(--panel);padding:11px 14px}
+  .tier .w{flex:0 0 96px;text-align:center;font-weight:700;font-size:12px;border-radius:7px;padding:6px 0}
+  .tier small{color:var(--muted);font-size:12px}
+  .w.disk{background:#1d2b22;color:var(--green)} .w.ram{background:#2a2618;color:var(--amber)}
+  .w.vram{background:#2a1d2e;color:var(--purple)}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.cards{grid-template-columns:1fr}}
+  .card{border-radius:12px;padding:16px;border:1px solid var(--border);background:var(--panel)}
+  .card h3{margin:0 0 8px;font-size:14px;color:var(--blue)}
+  .card p{margin:0;font-size:13px;color:var(--muted)}
+  .card .ex{margin-top:10px;font-size:12.5px;color:var(--text);background:var(--panel2);
+    border:1px solid var(--border);border-radius:7px;padding:8px 10px}
+  .flow{display:flex;flex-direction:column;gap:8px;margin:6px 0}
+  .ev{display:flex;align-items:center;gap:10px;font-size:13px}
+  .ev .dot{width:10px;height:10px;border-radius:50%;background:var(--green);flex:0 0 auto}
+  .ev code{background:var(--panel2);border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:12px;color:var(--blue)}
+  code{background:var(--panel2);border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-size:12px;color:var(--blue)}
+  footer{margin-top:44px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--border);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="tag">Session 1 · part 2</span>
+  <h1>The machine under the system</h1>
+  <div class="sub">Exposure, not mastery. Every service does one move: <b>register a port &rarr; a daemon
+  listens &rarr; the kernel allocates a resource</b>. The three differ only in what they ask for.</div>
+
+  <h2>1 · Same shape, three services</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Tutorial serve · :8000</h3>
+      <p>Register port &rarr; listen &rarr; serve files.</p>
+      <div class="ex">kernel ask: <b>a network port</b></div>
+    </div>
+    <div class="card">
+      <h3>Postgres · :5432</h3>
+      <p>Register port &rarr; listen &rarr; read/write rows.</p>
+      <div class="ex">kernel ask: <b>touch the disk</b></div>
+    </div>
+    <div class="card">
+      <h3>Ollama serve · :11434</h3>
+      <p>Register port &rarr; load weights &rarr; generate.</p>
+      <div class="ex">kernel ask: <b>reserve VRAM</b></div>
+    </div>
+    <div class="card">
+      <h3>The kernel</h3>
+      <p>The boss of the hardware. Programs don't touch disk, net, or memory — they <b>ask</b>.</p>
+      <div class="ex">building manager allocates resources</div>
+    </div>
+  </div>
+
+  <h2>2 · Storage: fast &amp; small &harr; slow &amp; big</h2>
+  <div class="tiers">
+    <div class="tier"><span class="w vram">VRAM</span><div><b>fastest, smallest, volatile</b> &mdash; model weights while thinking <small>(wide bus feeds 1000s of cores in parallel: matrix math)</small></div></div>
+    <div class="tier"><span class="w ram">RAM</span><div><b>fast, medium, volatile</b> &mdash; running programs, query working sets</div></div>
+    <div class="tier"><span class="w disk">DISK</span><div><b>slow, huge, persistent</b> &mdash; the database files, the books, your <code>.env</code></div></div>
+  </div>
+  <div class="note">A model <b>lives on disk</b> but must be <b>loaded into VRAM</b> to think. Big context =
+  more memory <i>on top of</i> the weights. Spills to CPU &rarr; slow.</div>
+
+  <h2>3 · One public IP, many private devices</h2>
+  <div class="pipe">
+    <div class="step"><b>localhost</b><small>127.0.0.1 — itself</small></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step"><b>device IP</b><small>192.168.x.x — LAN</small></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step"><b>NAT (router)</b><small>translates &amp; tracks</small></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step"><b>public IP</b><small>what the world sees</small></div>
+  </div>
+  <div class="note"><b>Port forwarding</b> = a manual NAT rule letting the outside in (AT&amp;T:
+  <code>192.168.1.254</code>, needs the access code). <b>Highest home risk: a photo of that code sticker.</b></div>
+
+  <h2>4 · HTTP vs. Stream</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>HTTP — ask once</h3>
+      <p>Handshake, one response, hang up. Perfect for CRUD: <code>POST</code> create, <code>GET</code> read,
+      <code>PUT</code>/<code>PATCH</code> update, <code>DELETE</code>.</p>
+      <div class="ex"><code>POST /api/advertisements</code> &rarr; one row, one reply</div>
+    </div>
+    <div class="card">
+      <h3>SSE — running commentary</h3>
+      <p>One connection stays open; the server pushes events until done. For slow workflows.</p>
+      <div class="ex">auth: <code>Authorization: Bearer &lt;token&gt;</code></div>
+    </div>
+  </div>
+
+  <h2>5 · The main feature is a stream</h2>
+  <div class="flow">
+    <div class="ev"><span class="dot"></span><code>start</code> acknowledge instantly</div>
+    <div class="ev"><span class="dot"></span><code>status</code> embedding query…</div>
+    <div class="ev"><span class="dot"></span><code>matches</code> found cited passages</div>
+    <div class="ev"><span class="dot"></span><code>token</code> answer, word by word</div>
+    <div class="ev"><span class="dot"></span><code>citations</code> the receipts</div>
+    <div class="ev"><span class="dot"></span><code>end</code> done &mdash; close</div>
+  </div>
+  <div class="note">Finite hardware: ~15–20 streams on a Mac Studio; one big model in use at a time.
+  Heavy DB scans + inference <b>erode</b> unified memory. Ways out: <b>queue</b> (RabbitMQ),
+  <b>schedule</b> (cron), <b>scale</b> (another node / cloud).</div>
+
+  <footer>Pair with: <code>md/FOUNDATION_COMPUTER_ENGINEERING.md</code> · after <code>md/FOUNDATION_FOR_AI_SYSTEMS.md</code> · then <code>md/00_OVERVIEW_AND_RUNNING_EXAMPLE.md</code></footer>
+</div>
+</body>
+</html>

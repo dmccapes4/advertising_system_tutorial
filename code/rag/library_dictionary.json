@@ -1,0 +1,32 @@
+{
+  "Breakthrough Copy": {
+    "strengths": ["copywriting", "hooks", "headlines", "storytelling"]
+  },
+  "Audience First": {
+    "strengths": ["audience", "targeting", "positioning", "branding"]
+  },
+  "The Legal Ad": {
+    "strengths": ["copyright", "compliance", "fair use", "disclaimers"]
+  },
+  "Retention Machines": {
+    "strengths": ["retention", "email", "lifecycle", "churn"]
+  },
+  "Scaling Spend": {
+    "strengths": ["scaling", "budget", "ROAS", "metrics"]
+  },
+  "Offer Architecture": {
+    "strengths": ["offers", "pricing", "funnels", "conversion"]
+  },
+  "Creative Testing": {
+    "strengths": ["creative", "testing", "A/B", "metrics"]
+  },
+  "Story & Brand": {
+    "strengths": ["storytelling", "brand", "voice", "audience"]
+  },
+  "Lifecycle Email": {
+    "strengths": ["email", "lifecycle", "retention", "sequences"]
+  },
+  "Funnel Math": {
+    "strengths": ["funnels", "metrics", "pricing", "conversion"]
+  }
+}

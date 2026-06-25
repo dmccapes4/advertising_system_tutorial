@@ -1,0 +1,50 @@
+[
+  {
+    "timestamp": "2026-06-23T03:34:41.907524+00:00",
+    "phase": "SPECIFY",
+    "stage": "route",
+    "detail": "selected books: ['Retention Machines', 'Lifecycle Email']"
+  },
+  {
+    "timestamp": "2026-06-23T03:34:41.907584+00:00",
+    "phase": "VALIDATE",
+    "stage": "route",
+    "detail": "PASS"
+  },
+  {
+    "timestamp": "2026-06-23T03:34:41.909944+00:00",
+    "phase": "SPECIFY",
+    "stage": "probe",
+    "detail": "1 passages"
+  },
+  {
+    "timestamp": "2026-06-23T03:34:41.909982+00:00",
+    "phase": "VALIDATE",
+    "stage": "probe",
+    "detail": "PASS"
+  },
+  {
+    "timestamp": "2026-06-23T03:34:41.911979+00:00",
+    "phase": "SPECIFY",
+    "stage": "gap",
+    "detail": "+0 gap passages"
+  },
+  {
+    "timestamp": "2026-06-23T03:34:41.912013+00:00",
+    "phase": "VALIDATE",
+    "stage": "gap",
+    "detail": "PASS"
+  },
+  {
+    "timestamp": "2026-06-23T03:34:41.913802+00:00",
+    "phase": "SPECIFY",
+    "stage": "synthesize",
+    "detail": "126 chars"
+  },
+  {
+    "timestamp": "2026-06-23T03:34:41.913840+00:00",
+    "phase": "VALIDATE",
+    "stage": "synthesize",
+    "detail": "PASS"
+  }
+]

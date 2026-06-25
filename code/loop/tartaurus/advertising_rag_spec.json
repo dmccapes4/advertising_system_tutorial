@@ -1,0 +1,34 @@
+{
+  "experiment_id": "advertising_rag_tutorial",
+  "description": "10-book staged-reduction RAG — TartaurusLoop spec for AJA tutorial",
+  "stages": [
+    {
+      "stage_key": "route",
+      "name": "Route — pick books",
+      "description": "Select books from library_dictionary.json relevant to the query.",
+      "tools": [],
+      "validate": {"min_books": 1}
+    },
+    {
+      "stage_key": "probe",
+      "name": "Probe — hybrid search per book",
+      "description": "Run keyword/semantic probe per selected book; keep top passages.",
+      "tools": [],
+      "validate": {"min_passages": 1}
+    },
+    {
+      "stage_key": "gap",
+      "name": "Gap — per-book missing angles",
+      "description": "For each book, fetch targeted passages for uncovered query topics.",
+      "tools": [],
+      "validate": {}
+    },
+    {
+      "stage_key": "synthesize",
+      "name": "Synthesize — cited briefing",
+      "description": "Merge passages into a concise cited briefing for the agent.",
+      "tools": [],
+      "validate": {"require_citations": true, "max_briefing_chars": 4000}
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "query": "retention email",
+  "books": [
+    "Retention Machines",
+    "Lifecycle Email"
+  ],
+  "citations": [
+    {
+      "book": "Retention Machines",
+      "page": 60
+    }
+  ],
+  "briefing": "Advertising knowledge briefing (cited):\n\n- [Retention Machines p.60] Post-purchase email within 24h sets retention trajectory."
+}

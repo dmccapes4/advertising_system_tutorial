@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Foundation for AI Systems — Visual</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2530; --border:#30363d;
+    --text:#e6edf3; --muted:#8b949e; --blue:#58a6ff; --green:#3fb950;
+    --amber:#d29922; --red:#f85149;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#16202c 0%,var(--bg) 55%);
+    color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+  .wrap{max-width:920px;margin:0 auto;padding:36px 22px 70px}
+  .tag{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--blue);
+    border:1px solid var(--blue);border-radius:999px;padding:2px 10px;margin-bottom:14px;opacity:.85}
+  h1{font-size:25px;margin:0 0 6px;letter-spacing:-.5px}
+  h2{font-size:15px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:34px 0 14px;font-weight:700}
+  .sub{color:var(--muted);font-size:14px;max-width:720px}
+  .pipe{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:6px 0}
+  .step{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:13px 12px;text-align:center;position:relative}
+  .step b{display:block;font-size:13px}
+  .step small{color:var(--muted);font-size:11px}
+  .arrow{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:20px;padding:0 6px}
+  .baked{border-color:var(--amber);box-shadow:0 0 0 1px rgba(210,153,34,.25) inset}
+  .note{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--amber);
+    border-radius:8px;padding:12px 14px;font-size:13.5px;margin:14px 0}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.cards{grid-template-columns:1fr}}
+  .card{border-radius:12px;padding:16px;border:1px solid var(--border);background:var(--panel)}
+  .card.good{border-color:var(--green)} .card.bad{border-color:var(--red)}
+  .card h3{margin:0 0 8px;font-size:14px}
+  .card.good h3{color:var(--green)} .card.bad h3{color:var(--red)}
+  .card p{margin:0;font-size:13px;color:var(--muted)}
+  .card .ex{margin-top:10px;font-size:12.5px;color:var(--text);background:var(--panel2);
+    border:1px solid var(--border);border-radius:7px;padding:8px 10px;font-style:italic}
+  .gauge{margin:10px 0 4px}
+  .gauge .bar{height:16px;border-radius:9px;background:linear-gradient(90deg,var(--green) 0%,var(--green) 55%,var(--amber) 72%,var(--red) 100%)}
+  .gauge .lab{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:5px}
+  .signal{display:flex;align-items:center;gap:10px;margin:14px 0}
+  .signal .seg{height:26px;border-radius:6px}
+  .signal .known{flex:3;background:var(--green);opacity:.8}
+  .signal .thin{flex:2;background:var(--amber);opacity:.7}
+  .signal .bluff{flex:3;background:repeating-linear-gradient(45deg,var(--red),var(--red) 6px,#7a1d1a 6px,#7a1d1a 12px)}
+  code{background:var(--panel2);border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-size:12px;color:var(--blue)}
+  footer{margin-top:44px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--border);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="tag">Read first</span>
+  <h1>How an AI system actually thinks</h1>
+  <div class="sub">Foundational ideas the whole tutorial assumes: honest data, where knowledge lives,
+  why more context can hurt, inference vs bluffing, precision not permission.</div>
+
+  <h2>1 · Where the knowledge lives</h2>
+  <div class="pipe">
+    <div class="step"><b>Training data</b><small>oceans of text</small></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step baked"><b>Weighted parameters</b><small>billions of numbers</small></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step"><b>System prompt</b><small>rules</small></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step"><b>User prompt</b><small>the ask</small></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step"><b>Context</b><small>what you hand it</small></div>
+  </div>
+  <div class="note">Training data shapes the weights, then is thrown away. The model <b>predicts</b> — it does not look up.
+  Our 10-book RAG gives cited pages so it doesn't have to guess from memory.</div>
+
+  <h2>2 · Why more context can hurt</h2>
+  <div class="gauge">
+    <div class="bar"></div>
+    <div class="lab"><span>minimal sufficient context</span><span>whole book → diluted reasoning</span></div>
+  </div>
+
+  <h2>3 · Inference runs out of signal</h2>
+  <div class="signal">
+    <div class="seg known"></div>
+    <div class="seg thin"></div>
+    <div class="seg bluff"></div>
+  </div>
+  <p class="sub">Powerful until evidence runs out — then it bluffs. Same for humans and agents.</p>
+
+  <h2>4 · Precision, not permission</h2>
+  <div class="cards">
+    <div class="card good">
+      <h3>Precision</h3>
+      <p>Minimal context + clear contract. You own intent.</p>
+      <div class="ex">Curated briefing with citations — not "here's the whole book."</div>
+    </div>
+    <div class="card bad">
+      <h3>Permission</h3>
+      <p>Vague prompts. Hope-based engineering.</p>
+      <div class="ex">"AI, go do it."</div>
+    </div>
+  </div>
+
+  <footer>Pair with: <code>md/FOUNDATION_FOR_AI_SYSTEMS.md</code> · then <code>md/00_OVERVIEW_AND_RUNNING_EXAMPLE.md</code></footer>
+</div>
+</body>
+</html>

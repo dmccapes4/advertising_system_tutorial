@@ -8,7 +8,7 @@
   :root{
     --bg:#0d1117; --panel:#161b22; --panel2:#1c2530; --border:#30363d;
     --text:#e6edf3; --muted:#8b949e; --blue:#58a6ff; --green:#3fb950;
-    --amber:#d29922; --red:#f85149;
+    --amber:#d29922; --red:#f85149; --purple:#bc8cff;
   }
   *{box-sizing:border-box}
   body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#16202c 0%,var(--bg) 55%);
@@ -18,16 +18,76 @@
     border:1px solid var(--blue);border-radius:999px;padding:2px 10px;margin-bottom:14px;opacity:.85}
   h1{font-size:25px;margin:0 0 6px;letter-spacing:-.5px}
   h2{font-size:15px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:34px 0 14px;font-weight:700}
-  .sub{color:var(--muted);font-size:14px;max-width:720px}
+  .sub{color:var(--muted);font-size:14px;max-width:740px;margin:0 0 8px}
+
+  /* pipeline */
   .pipe{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:6px 0}
-  .step{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--border);border-radius:12px;
-    padding:13px 12px;text-align:center;position:relative}
-  .step b{display:block;font-size:13px}
-  .step small{color:var(--muted);font-size:11px}
-  .arrow{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:20px;padding:0 6px}
+  .step{flex:1;min-width:100px;background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:11px 10px;text-align:center}
+  .step b{display:block;font-size:12.5px}
+  .step small{color:var(--muted);font-size:10.5px}
+  .arrow{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:18px;padding:0 4px}
   .baked{border-color:var(--amber);box-shadow:0 0 0 1px rgba(210,153,34,.25) inset}
+  .gone{opacity:.45;border-style:dashed}
   .note{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--amber);
     border-radius:8px;padding:12px 14px;font-size:13.5px;margin:14px 0}
+
+  /* heuristic: old code vs one prompt */
+  .heur{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+  @media(max-width:680px){.heur{grid-template-columns:1fr}}
+  .heur .side{border-radius:12px;padding:14px;border:1px solid var(--border);background:var(--panel);font-size:12px}
+  .heur .side.old{border-color:var(--red)}
+  .heur .side.new{border-color:var(--green)}
+  .heur .lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:8px}
+  .heur .old .lbl{color:var(--red)} .heur .new .lbl{color:var(--green)}
+  .heur pre{margin:0;background:var(--panel2);border:1px solid var(--border);border-radius:8px;
+    padding:10px;font-size:11px;line-height:1.45;overflow:auto;color:#c9d1d9;font-family:ui-monospace,Consolas,monospace}
+  .heur .prompt{margin:0;font-size:13px;color:var(--text);background:var(--panel2);border:1px solid var(--border);
+    border-radius:8px;padding:12px;line-height:1.5}
+  .heur .arrow-mid{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:22px;
+    grid-column:1/-1;margin:-4px 0}
+  @media(min-width:681px){
+    .heur{grid-template-columns:1fr auto 1fr}
+    .heur .arrow-mid{grid-column:2;grid-row:1;margin:0}
+  }
+
+  /* context picker */
+  .ctx-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 10px}
+  .ctx-tabs button{font:inherit;font-size:12px;font-weight:600;cursor:pointer;border-radius:999px;
+    padding:7px 13px;border:1px solid var(--border);background:var(--panel2);color:var(--muted);transition:.15s}
+  .ctx-tabs button:hover{color:var(--text);border-color:var(--blue)}
+  .ctx-tabs button.on{border-color:var(--blue);color:var(--blue);background:rgba(88,166,255,.1)}
+
+  /* 2x2 weight grid + inference panel */
+  .matrix-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+  @media(max-width:520px){.matrix-wrap{grid-template-columns:1fr}}
+  .wcell{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+  .wcell .wlbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:8px}
+  .mini-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;max-width:120px;margin:0 auto 8px}
+  .mini-grid span{display:block;aspect-ratio:1;border-radius:4px;background:var(--panel2);border:1px solid var(--border);
+    transition:background .25s,box-shadow .25s,transform .2s}
+  .mini-grid span.on{background:var(--blue);border-color:var(--blue);box-shadow:0 0 8px rgba(88,166,255,.45)}
+  .mini-grid span.on.amber{background:var(--amber);border-color:var(--amber);box-shadow:0 0 8px rgba(210,153,34,.4)}
+  .mini-grid span.on.red{background:var(--red);border-color:var(--red);box-shadow:0 0 8px rgba(248,81,73,.35)}
+  .mini-grid span.on.green{background:var(--green);border-color:var(--green);box-shadow:0 0 8px rgba(63,185,80,.35)}
+  .wcell .cap{font-size:11.5px;color:var(--muted);line-height:1.35}
+
+  .infer-panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:12px 0}
+  .infer-panel .ctx-line{font-size:13px;margin-bottom:10px;color:var(--text)}
+  .infer-panel .ctx-line em{color:var(--blue);font-style:normal}
+  .meter-row{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:12px}
+  .meter-row label{flex:0 0 88px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+  .meter{flex:1;height:10px;border-radius:6px;background:var(--panel2);overflow:hidden}
+  .meter .fill{height:100%;border-radius:6px;transition:width .35s}
+  .meter .fill.sig{background:linear-gradient(90deg,var(--green),var(--amber))}
+  .meter .fill.risk{background:linear-gradient(90deg,var(--amber),var(--red))}
+  .outcome{margin-top:10px;padding:10px 12px;border-radius:8px;font-size:13px;border:1px solid var(--border);
+    background:var(--panel2)}
+
+  .gauge{margin:10px 0 4px}
+  .gauge .bar{height:16px;border-radius:9px;background:linear-gradient(90deg,var(--green) 0%,var(--green) 55%,var(--amber) 72%,var(--red) 100%)}
+  .gauge .lab{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:5px}
+
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:680px){.cards{grid-template-columns:1fr}}
   .card{border-radius:12px;padding:16px;border:1px solid var(--border);background:var(--panel)}
@@ -37,14 +97,7 @@
   .card p{margin:0;font-size:13px;color:var(--muted)}
   .card .ex{margin-top:10px;font-size:12.5px;color:var(--text);background:var(--panel2);
     border:1px solid var(--border);border-radius:7px;padding:8px 10px;font-style:italic}
-  .gauge{margin:10px 0 4px}
-  .gauge .bar{height:16px;border-radius:9px;background:linear-gradient(90deg,var(--green) 0%,var(--green) 55%,var(--amber) 72%,var(--red) 100%)}
-  .gauge .lab{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:5px}
-  .signal{display:flex;align-items:center;gap:10px;margin:14px 0}
-  .signal .seg{height:26px;border-radius:6px}
-  .signal .known{flex:3;background:var(--green);opacity:.8}
-  .signal .thin{flex:2;background:var(--amber);opacity:.7}
-  .signal .bluff{flex:3;background:repeating-linear-gradient(45deg,var(--red),var(--red) 6px,#7a1d1a 6px,#7a1d1a 12px)}
+
   code{background:var(--panel2);border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-size:12px;color:var(--blue)}
   footer{margin-top:44px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--border);padding-top:16px}
 </style>
@@ -53,39 +106,77 @@
 <div class="wrap">
   <span class="tag">Read first</span>
   <h1>How an AI system actually thinks</h1>
-  <div class="sub">Foundational ideas the whole tutorial assumes: honest data, where knowledge lives,
-  why more context can hurt, inference vs bluffing, precision not permission.</div>
+  <div class="sub">Honest data, where knowledge lives, heuristics vs prompts, how context
+  re-weights inference, precision not permission.</div>
 
   <h2>1 · Where the knowledge lives</h2>
   <div class="pipe">
-    <div class="step"><b>Training data</b><small>oceans of text</small></div>
+    <div class="step gone"><b>Training data</b><small>shaped the weights</small></div>
     <div class="arrow">&rarr;</div>
-    <div class="step baked"><b>Weighted parameters</b><small>billions of numbers</small></div>
+    <div class="step baked"><b>Weighted parameters</b><small>fixed 2×2 … billions</small></div>
     <div class="arrow">&rarr;</div>
-    <div class="step"><b>System prompt</b><small>rules</small></div>
+    <div class="step"><b>System + user</b><small>your ask</small></div>
     <div class="arrow">&rarr;</div>
-    <div class="step"><b>User prompt</b><small>the ask</small></div>
-    <div class="arrow">&rarr;</div>
-    <div class="step"><b>Context</b><small>what you hand it</small></div>
+    <div class="step"><b>Context</b><small>changes what's used</small></div>
   </div>
-  <div class="note">Training data shapes the weights, then is thrown away. The model <b>predicts</b> — it does not look up.
-  Our 10-book RAG gives cited pages so it doesn't have to guess from memory.</div>
+  <div class="note">Training data is <b>gone</b> — only the weights remain. The model does not look up;
+  it <b>predicts</b> across those weights. Different context → different regions activate → different inference.</div>
 
-  <h2>2 · Why more context can hurt</h2>
+  <h2>2 · LLM = heuristic infrastructure</h2>
+  <p class="sub">Regex and <code>if/elif</code> trees collapse into a sentence in the system prompt.
+  You own intent and contracts; the model handles the brittle matching.</p>
+  <div class="heur">
+    <div class="side old">
+      <div class="lbl">Before — brittle code</div>
+      <pre>if re.match(r"refund|return", q):
+    route = "refunds"
+elif re.match(r"ship|track", q):
+    route = "shipping"
+elif "fair use" in q.lower():
+    route = "legal"
+else:
+    route = "general"  # … grows forever</pre>
+    </div>
+    <div class="arrow-mid">&rarr;</div>
+    <div class="side new">
+      <div class="lbl">After — one prompt line</div>
+      <p class="prompt">"Route the user question to refunds, shipping, legal, or general — use the advertising knowledge tool for legal/fair-use questions and cite book + page."</p>
+    </div>
+  </div>
+
+  <h2>3 · Same weights — context changes what's used</h2>
+  <p class="sub">Pick a scenario. The <b>parameter grid is identical</b>; only the prompt + context
+  change which weight blocks light up — and how far inference can run on signal vs bluff.</p>
+
+  <div class="ctx-tabs" id="ctxTabs"></div>
+
+  <div class="matrix-wrap" id="matrixWrap">
+    <div class="wcell"><div class="wlbl">Block A · language / recall</div><div class="mini-grid" id="g0"></div><div class="cap" id="c0"></div></div>
+    <div class="wcell"><div class="wlbl">Block B · code / structure</div><div class="mini-grid" id="g1"></div><div class="cap" id="c1"></div></div>
+    <div class="wcell"><div class="wlbl">Block C · domain / ads</div><div class="mini-grid" id="g2"></div><div class="cap" id="c2"></div></div>
+    <div class="wcell"><div class="wlbl">Block D · reasoning path</div><div class="mini-grid" id="g3"></div><div class="cap" id="c3"></div></div>
+  </div>
+
+  <div class="infer-panel">
+    <div class="ctx-line" id="ctxLine"></div>
+    <div class="meter-row">
+      <label>Signal</label>
+      <div class="meter"><div class="fill sig" id="sigBar" style="width:70%"></div></div>
+    </div>
+    <div class="meter-row">
+      <label>Bluff risk</label>
+      <div class="meter"><div class="fill risk" id="riskBar" style="width:30%"></div></div>
+    </div>
+    <div class="outcome" id="outcome"></div>
+  </div>
+
+  <h2>4 · Why more context can hurt</h2>
   <div class="gauge">
     <div class="bar"></div>
-    <div class="lab"><span>minimal sufficient context</span><span>whole book → diluted reasoning</span></div>
+    <div class="lab"><span>minimal sufficient context (RAG briefing)</span><span>whole book → diluted reasoning</span></div>
   </div>
 
-  <h2>3 · Inference runs out of signal</h2>
-  <div class="signal">
-    <div class="seg known"></div>
-    <div class="seg thin"></div>
-    <div class="seg bluff"></div>
-  </div>
-  <p class="sub">Powerful until evidence runs out — then it bluffs. Same for humans and agents.</p>
-
-  <h2>4 · Precision, not permission</h2>
+  <h2>5 · Precision, not permission</h2>
   <div class="cards">
     <div class="card good">
       <h3>Precision</h3>
@@ -101,5 +192,107 @@
 
   <footer>Pair with: <code>md/FOUNDATION_FOR_AI_SYSTEMS.md</code> · then <code>md/00_OVERVIEW_AND_RUNNING_EXAMPLE.md</code></footer>
 </div>
+
+<script>
+(function(){
+  // Each scenario: 4 blocks × 16 cells (1=on blue, 2=amber, 3=red hot, 4=green good)
+  // caps describe what that block is doing; signal/bluff drive inference panel
+  const SCENARIOS = [
+    {
+      id: "python",
+      label: "Write Python",
+      line: "User: <em>\"Write a refund guard function\"</em> · thin context",
+      blocks: [
+        { on:[0,0,0,1, 0,0,1,1, 0,1,1,1, 1,1,1,1], cls:"on", cap:"Low — not literary" },
+        { on:[1,1,1,1, 1,1,1,1, 1,1,0,0, 1,1,1,0], cls:"on", cap:"High — structure + syntax" },
+        { on:[0,0,0,0, 0,1,0,0, 0,0,0,0, 0,0,0,0], cls:"on", cap:"Minimal — generic code task" },
+        { on:[0,1,1,1, 1,1,1,0, 0,0,0,0, 0,0,0,0], cls:"on green", cap:"Clean inference path" }
+      ],
+      signal: 82, bluff: 18,
+      outcome: "<b>Inference:</b> Strong signal from training (code is in the weights). Predicts plausible Python — usually fine. Still not a lookup; a wrong import is prediction error, not hallucination."
+    },
+    {
+      id: "shakespeare",
+      label: "Quote Shakespeare",
+      line: "User: <em>\"Quote Hamlet in German\"</em> · no context pasted",
+      blocks: [
+        { on:[1,1,1,1, 1,1,1,1, 1,1,1,0, 1,1,0,0], cls:"on amber", cap:"High — memorized patterns" },
+        { on:[0,0,0,0, 0,0,1,0, 0,0,0,0, 0,0,0,0], cls:"on", cap:"Low" },
+        { on:[0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0], cls:"on", cap:"Unused" },
+        { on:[1,1,1,0, 0,1,1,0, 0,0,0,0, 0,0,0,0], cls:"on amber", cap:"Recall path — predict, not retrieve" }
+      ],
+      signal: 75, bluff: 35,
+      outcome: "<b>Inference:</b> Weights baked in literary text. Output may be <i>almost</i> right — that's next-token prediction, not fabrication. No citation unless you supply the text."
+    },
+    {
+      id: "rag",
+      label: "Fair use + RAG",
+      line: "User: <em>\"Is this headline OK under fair use?\"</em> · <b>curated cited briefing</b> in context",
+      blocks: [
+        { on:[0,0,0,0, 0,1,0,0, 0,0,0,0, 0,0,0,0], cls:"on", cap:"Low — not guessing from memory" },
+        { on:[0,0,1,0, 0,1,0,0, 0,0,0,0, 0,0,0,0], cls:"on", cap:"Light — reading supplied text" },
+        { on:[1,1,1,1, 1,1,1,0, 1,1,0,0, 0,0,0,0], cls:"on green", cap:"High — your ad/legal passages" },
+        { on:[0,1,1,1, 1,1,1,1, 1,1,1,0, 1,1,0,0], cls:"on green", cap:"Focused — reasons on evidence" }
+      ],
+      signal: 92, bluff: 8,
+      outcome: "<b>Inference:</b> Signal from <i>your</i> context, not mystery weights. Model reasons over cited passages → precise answer. This is what the 10-book RAG is for."
+    },
+    {
+      id: "book",
+      label: "Whole book dumped",
+      line: "User: <em>\"Is this headline OK?\"</em> · entire book pasted into context",
+      blocks: [
+        { on:[1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1], cls:"on amber", cap:"Flooded — everything fires" },
+        { on:[1,1,1,1, 1,1,1,0, 1,1,1,0, 1,0,0,0], cls:"on amber", cap:"Noisy overlap" },
+        { on:[1,1,1,1, 1,1,1,1, 1,1,0,0, 1,1,0,0], cls:"on amber", cap:"Diluted — hard to find the page" },
+        { on:[1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1], cls:"on red", cap:"Overloaded — reasoning smears" }
+      ],
+      signal: 45, bluff: 55,
+      outcome: "<b>Inference:</b> Same weights, but every block competes. Signal thins → model bluffs or latches onto wrong passage. More context made it <i>worse</i>. Use a briefing, not the book."
+    }
+  ];
+
+  let active = 0;
+
+  // Build 4×4 mini-grids once
+  for (let b = 0; b < 4; b++) {
+    const g = document.getElementById("g" + b);
+    for (let i = 0; i < 16; i++) {
+      const s = document.createElement("span");
+      s.dataset.idx = i;
+      g.appendChild(s);
+    }
+  }
+
+  const tabs = document.getElementById("ctxTabs");
+  SCENARIOS.forEach((sc, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = sc.label;
+    btn.type = "button";
+    btn.onclick = () => { active = i; render(); };
+    tabs.appendChild(btn);
+  });
+
+  function render(){
+    const sc = SCENARIOS[active];
+    tabs.querySelectorAll("button").forEach((b, i) => b.classList.toggle("on", i === active));
+    document.getElementById("ctxLine").innerHTML = sc.line;
+    document.getElementById("sigBar").style.width = sc.signal + "%";
+    document.getElementById("riskBar").style.width = sc.bluff + "%";
+    document.getElementById("outcome").innerHTML = sc.outcome;
+
+    sc.blocks.forEach((blk, b) => {
+      const cells = document.getElementById("g" + b).querySelectorAll("span");
+      const clsParts = (blk.cls || "on").split(" ");
+      cells.forEach((cell, i) => {
+        cell.className = blk.on[i] ? clsParts.join(" ") : "";
+      });
+      document.getElementById("c" + b).textContent = blk.cap;
+    });
+  }
+
+  render();
+})();
+</script>
 </body>
 </html>

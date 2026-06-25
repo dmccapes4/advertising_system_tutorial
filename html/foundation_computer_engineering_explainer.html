@@ -34,6 +34,37 @@
   .tier small{color:var(--muted);font-size:12px}
   .w.disk{background:#1d2b22;color:var(--green)} .w.ram{background:#2a2618;color:var(--amber)}
   .w.vram{background:#2a1d2e;color:var(--purple)}
+  .w.unified{background:#1d2430;color:var(--blue)}
+  .mem-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+  @media(max-width:680px){.mem-compare{grid-template-columns:1fr}}
+  .mem-box{border-radius:12px;padding:14px;border:1px solid var(--border);background:var(--panel)}
+  .mem-box.apple{border-color:var(--blue)} .mem-box.nvidia{border-color:var(--purple)}
+  .mem-box h3{margin:0 0 4px;font-size:14px}
+  .mem-box.apple h3{color:var(--blue)} .mem-box.nvidia h3{color:var(--purple)}
+  .mem-box .cap{font-size:11.5px;color:var(--muted);margin-bottom:10px}
+  .pool{height:22px;border-radius:8px;background:var(--panel2);border:1px solid var(--border);
+    display:flex;overflow:hidden;margin:8px 0 4px}
+  .pool .seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;
+    font-weight:700;color:rgba(255,255,255,.9);min-width:2px;overflow:hidden;white-space:nowrap}
+  .pool .seg.os{background:#484f58} .pool .seg.app{background:var(--amber)}
+  .pool .seg.db{background:var(--green)} .pool .seg.browser{background:#6e7681}
+  .pool .seg.model{background:var(--blue)} .pool .seg.vram{background:var(--purple)}
+  .pool .seg.ram{background:var(--amber);opacity:.85} .pool .seg.free{background:transparent;border-right:1px dashed var(--border)}
+  .pool-label{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-bottom:12px}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:10.5px;color:var(--muted);margin:8px 0}
+  .legend span{display:flex;align-items:center;gap:5px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:2px}
+  .pcie{display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 0;font-size:11px;color:var(--muted)}
+  .pcie .arr{color:var(--purple);font-size:18px}
+  .offload{margin-top:14px;border-radius:12px;padding:14px;border:1px solid var(--border);background:var(--panel)}
+  .offload h4{margin:0 0 8px;font-size:13px;color:var(--amber);text-transform:uppercase;letter-spacing:.5px}
+  .layer-stack{display:flex;flex-direction:column;gap:4px;margin:10px 0}
+  .layer{display:flex;align-items:center;gap:10px;font-size:12px;padding:8px 10px;border-radius:8px;border:1px solid var(--border)}
+  .layer.gpu{background:rgba(188,140,255,.12);border-color:var(--purple)}
+  .layer.cpu{background:rgba(210,153,34,.1);border-color:var(--amber)}
+  .layer .where{flex:0 0 52px;font-weight:700;font-size:10px;text-transform:uppercase}
+  .layer.gpu .where{color:var(--purple)} .layer.cpu .where{color:var(--amber)}
+  .layer .speed{margin-left:auto;font-size:10px;color:var(--muted)}
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:680px){.cards{grid-template-columns:1fr}}
   .card{border-radius:12px;padding:16px;border:1px solid var(--border);background:var(--panel)}
@@ -42,10 +73,25 @@
   .card .ex{margin-top:10px;font-size:12.5px;color:var(--text);background:var(--panel2);
     border:1px solid var(--border);border-radius:7px;padding:8px 10px}
   .flow{display:flex;flex-direction:column;gap:8px;margin:6px 0}
-  .ev{display:flex;align-items:center;gap:10px;font-size:13px}
-  .ev .dot{width:10px;height:10px;border-radius:50%;background:var(--green);flex:0 0 auto}
+  .ev{display:flex;align-items:center;gap:10px;font-size:13px;transition:opacity .25s}
+  .ev .dot{width:10px;height:10px;border-radius:50%;background:var(--green);flex:0 0 auto;transition:background .25s,box-shadow .25s}
   .ev code{background:var(--panel2);border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:12px;color:var(--blue)}
+  .ev.pending{opacity:.4}.ev.pending .dot{background:var(--border)}
+  .ev.active{opacity:1}.ev.active .dot{background:var(--amber);box-shadow:0 0 8px rgba(210,153,34,.5)}
+  .ev.done{opacity:1}.ev.done .dot{background:var(--green)}
   code{background:var(--panel2);border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-size:12px;color:var(--blue)}
+  .demo-btn{font:inherit;font-size:12px;font-weight:600;cursor:pointer;border-radius:8px;padding:8px 14px;
+    border:1px solid var(--blue);background:rgba(88,166,255,.12);color:var(--blue);margin-top:10px;width:100%;transition:.15s}
+  .demo-btn:hover:not(:disabled){filter:brightness(1.15)}
+  .demo-btn:disabled{opacity:.45;cursor:not-allowed}
+  .demo-btn.sse{border-color:var(--purple);background:rgba(188,140,255,.12);color:var(--purple)}
+  .demo-log{margin-top:10px;font-size:11px;line-height:1.5;font-family:ui-monospace,Consolas,"Courier New",monospace;
+    background:var(--panel2);border:1px solid var(--border);border-radius:7px;padding:10px;min-height:92px;max-height:168px;overflow-y:auto}
+  .demo-log .hint{color:var(--muted);font-size:10.5px;font-style:italic}
+  .demo-log .req{color:var(--blue)}.demo-log .wait{color:var(--amber)}
+  .demo-log .ok{color:var(--green);font-weight:600}.demo-log .closed{color:var(--muted);font-size:10.5px}
+  .demo-log .ev-line{color:var(--text);margin-top:6px;padding-top:6px;border-top:1px dashed var(--border)}
+  .demo-log .ev-line .ev-type{color:var(--purple);font-weight:600}
   footer{margin-top:44px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--border);padding-top:16px}
 </style>
 </head>
@@ -86,8 +132,75 @@
     <div class="tier"><span class="w ram">RAM</span><div><b>fast, medium, volatile</b> &mdash; running programs, query working sets</div></div>
     <div class="tier"><span class="w disk">DISK</span><div><b>slow, huge, persistent</b> &mdash; the database files, the books, your <code>.env</code></div></div>
   </div>
-  <div class="note">A model <b>lives on disk</b> but must be <b>loaded into VRAM</b> to think. Big context =
+  <div class="note">A model <b>lives on disk</b> but must be <b>loaded into fast memory</b> to think. Big context =
   more memory <i>on top of</i> the weights. Spills to CPU &rarr; slow.</div>
+
+  <h2 style="margin-top:28px;font-size:13px">Apple Unified Memory vs Nvidia GPU</h2>
+  <p class="sub" style="margin-bottom:10px">Two bets on where fast memory lives. Apple shares one big pool;
+  Nvidia keeps a separate VRAM card — but that pool is often <b>smaller</b> per GPU.</p>
+
+  <div class="mem-compare">
+    <div class="mem-box apple">
+      <h3>Apple Unified Memory</h3>
+      <div class="cap">One pool — CPU, GPU, and every app draw from the same bytes (e.g. 192 GB on M2 Ultra)</div>
+      <div class="pool-label"><span>192 GB total — shared</span><span id="appleFree">~98 GB free for Ollama</span></div>
+      <div class="pool" title="Same memory bar — everything competes">
+        <div class="seg os" style="width:8%" title="macOS">OS</div>
+        <div class="seg browser" style="width:14%" title="Chrome">Chrome</div>
+        <div class="seg db" style="width:18%" title="Postgres">Postgres</div>
+        <div class="seg app" style="width:10%" title="IDE / Slack">IDE</div>
+        <div class="seg model" style="width:26%" title="Ollama — large model weights + context">Ollama</div>
+        <div class="seg free" style="flex:1" title="Still available — but shared">&nbsp;</div>
+      </div>
+      <div class="legend">
+        <span><i style="background:#484f58"></i> OS</span>
+        <span><i style="background:#6e7681"></i> Browser</span>
+        <span><i style="background:var(--green)"></i> Postgres</span>
+        <span><i style="background:var(--amber)"></i> Other apps</span>
+        <span><i style="background:var(--blue)"></i> Model</span>
+      </div>
+      <div class="ex" style="margin-top:10px;font-size:12px;color:var(--muted);background:var(--panel2);border:1px solid var(--border);border-radius:7px;padding:8px 10px">
+        <b style="color:var(--text)">Available memory moves.</b> Open another app or run a heavy DB scan and the blue
+        slice shrinks — even though the <b>total pool</b> is huge. No PCIe copy; CPU and GPU see the same RAM.
+        Still often <b>more capacity</b> than a single consumer Nvidia card (24 GB).
+      </div>
+    </div>
+
+    <div class="mem-box nvidia">
+      <h3>Nvidia discrete GPU</h3>
+      <div class="cap">Separate VRAM on the card — fixed size, fast bus, matrix cores</div>
+      <div class="pool-label"><span>System RAM (64 GB)</span><span>apps only — not the model</span></div>
+      <div class="pool">
+        <div class="seg os" style="width:10%">OS</div>
+        <div class="seg browser" style="width:15%">Chrome</div>
+        <div class="seg db" style="width:20%">Postgres</div>
+        <div class="seg app" style="width:12%">apps</div>
+        <div class="seg free" style="flex:1">&nbsp;</div>
+      </div>
+      <div class="pcie"><span>PCIe copy</span><span class="arr">&darr;</span><span>weights must fit here</span></div>
+      <div class="pool-label"><span>VRAM (24 GB on 4090)</span><span>dedicated to GPU</span></div>
+      <div class="pool">
+        <div class="seg vram" style="width:70%">Model weights + KV cache</div>
+        <div class="seg free" style="flex:1">&nbsp;</div>
+      </div>
+      <div class="ex" style="margin-top:10px;font-size:12px;color:var(--muted);background:var(--panel2);border:1px solid var(--border);border-radius:7px;padding:8px 10px">
+        <b style="color:var(--text)">VRAM is isolated.</b> Postgres and Chrome don't eat GPU memory — but the model
+        is capped at <b>24 GB</b> (typical). Top-end cards (H100 80 GB) win on raw bandwidth; scale by adding cards.
+      </div>
+    </div>
+  </div>
+
+  <div class="offload">
+    <h4>CPU offloading — when the model doesn't fit</h4>
+    <p style="margin:0 0 10px;font-size:13px;color:var(--muted)">If weights + context exceed VRAM (or the free slice
+    of unified memory), Ollama can <b>spill layers</b> to system RAM and run them on the CPU. It still works — slowly.</p>
+    <div class="layer-stack">
+      <div class="layer gpu"><span class="where">GPU</span><span>Layers 1–20 on VRAM / GPU cores</span><span class="speed">fast — matrix math</span></div>
+      <div class="layer cpu"><span class="where">CPU</span><span>Layers 21–32 offloaded to RAM</span><span class="speed">slow — crawls</span></div>
+    </div>
+    <p style="margin:8px 0 0;font-size:12.5px;color:var(--text)"><b>Rule:</b> fits in fast memory &rarr; fast generation.
+    Spills to CPU &rarr; tokens trickle out. On Apple, a bigger unified pool helps you avoid this; on Nvidia, you hit the VRAM wall sooner.</p>
+  </div>
 
   <h2>3 · One public IP, many private devices</h2>
   <div class="pipe">
@@ -108,23 +221,27 @@
       <h3>HTTP — ask once</h3>
       <p>Handshake, one response, hang up. Perfect for CRUD: <code>POST</code> create, <code>GET</code> read,
       <code>PUT</code>/<code>PATCH</code> update, <code>DELETE</code>.</p>
-      <div class="ex"><code>POST /api/advertisements</code> &rarr; one row, one reply</div>
+      <button type="button" class="demo-btn" id="httpBtn">POST /api/advertisements</button>
+      <div class="demo-log" id="httpLog"><span class="hint">Click to send one request — response in ~&frac12; s, then hang up.</span></div>
     </div>
     <div class="card">
       <h3>SSE — running commentary</h3>
       <p>One connection stays open; the server pushes events until done. For slow workflows.</p>
-      <div class="ex">auth: <code>Authorization: Bearer &lt;token&gt;</code></div>
+      <button type="button" class="demo-btn sse" id="sseBtn">Open SSE stream</button>
+      <div class="demo-log" id="sseLog"><span class="hint">Click to open the connection — events arrive every 1–2 s until <code>end</code>.</span></div>
     </div>
   </div>
 
   <h2>5 · The main feature is a stream</h2>
-  <div class="flow">
-    <div class="ev"><span class="dot"></span><code>start</code> acknowledge instantly</div>
-    <div class="ev"><span class="dot"></span><code>status</code> embedding query…</div>
-    <div class="ev"><span class="dot"></span><code>matches</code> found cited passages</div>
-    <div class="ev"><span class="dot"></span><code>token</code> answer, word by word</div>
-    <div class="ev"><span class="dot"></span><code>citations</code> the receipts</div>
-    <div class="ev"><span class="dot"></span><code>end</code> done &mdash; close</div>
+  <div class="flow" id="sseFlow">
+    <div class="ev pending"><span class="dot"></span><code>start</code> acknowledge instantly</div>
+    <div class="ev pending"><span class="dot"></span><code>status</code> embedding query…</div>
+    <div class="ev pending"><span class="dot"></span><code>status</code> retrieving from knowledge base…</div>
+    <div class="ev pending"><span class="dot"></span><code>matches</code> found cited passages</div>
+    <div class="ev pending"><span class="dot"></span><code>status</code> generating answer…</div>
+    <div class="ev pending"><span class="dot"></span><code>token</code> answer, word by word</div>
+    <div class="ev pending"><span class="dot"></span><code>citations</code> the receipts</div>
+    <div class="ev pending"><span class="dot"></span><code>end</code> done &mdash; close</div>
   </div>
   <div class="note">Finite hardware: ~15–20 streams on a Mac Studio; one big model in use at a time.
   Heavy DB scans + inference <b>erode</b> unified memory. Ways out: <b>queue</b> (RabbitMQ),
@@ -132,5 +249,112 @@
 
   <footer>Pair with: <code>md/FOUNDATION_COMPUTER_ENGINEERING.md</code> · after <code>md/FOUNDATION_FOR_AI_SYSTEMS.md</code> · then <code>md/00_OVERVIEW_AND_RUNNING_EXAMPLE.md</code></footer>
 </div>
+<script>
+(function(){
+  const httpBtn = document.getElementById("httpBtn");
+  const httpLog = document.getElementById("httpLog");
+  const sseBtn = document.getElementById("sseBtn");
+  const sseLog = document.getElementById("sseLog");
+  const sseFlow = document.getElementById("sseFlow");
+  const flowSteps = sseFlow ? [...sseFlow.querySelectorAll(".ev")] : [];
+
+  let sseRunning = false;
+  let sseTimers = [];
+
+  function line(cls, html){
+    const el = document.createElement("div");
+    el.className = cls;
+    el.innerHTML = html;
+    return el;
+  }
+
+  function clearSseTimers(){
+    sseTimers.forEach(t => clearTimeout(t));
+    sseTimers = [];
+  }
+
+  function resetFlow(){
+    flowSteps.forEach(s => s.classList.remove("active", "done"));
+    flowSteps.forEach(s => s.classList.add("pending"));
+  }
+
+  function setFlowStep(i, state){
+    const step = flowSteps[i];
+    if (!step) return;
+    step.classList.remove("pending", "active", "done");
+    step.classList.add(state);
+  }
+
+  function sseDelay(){
+    return 1000 + Math.random() * 1000;
+  }
+
+  httpBtn.addEventListener("click", () => {
+    httpBtn.disabled = true;
+    httpLog.innerHTML = "";
+    httpLog.appendChild(line("req", "&rarr; POST /api/advertisements HTTP/1.1"));
+    httpLog.appendChild(line("req", "Authorization: Bearer &lt;token&gt;"));
+    httpLog.appendChild(line("req", 'Content-Type: application/json'));
+    httpLog.appendChild(line("req", '{"title":"Summer sale","channel":"display"}'));
+    const wait = line("wait", "… waiting for server");
+    httpLog.appendChild(wait);
+
+    setTimeout(() => {
+      wait.remove();
+      httpLog.appendChild(line("ok", "&larr; HTTP/1.1 201 Created"));
+      httpLog.appendChild(line("req", 'Content-Type: application/json'));
+      httpLog.appendChild(line("req", '{"id":42,"title":"Summer sale","channel":"display"}'));
+      httpLog.appendChild(line("closed", "connection closed"));
+      httpBtn.disabled = false;
+    }, 500);
+  });
+
+  const sseEvents = [
+    { type: "start", data: '{"q":"Q4 budget rules?","sources":["policy","playbooks"]}' },
+    { type: "status", data: '{"status":"embedding_query"}' },
+    { type: "status", data: '{"status":"retrieving"}' },
+    { type: "matches", data: '{"matches":6,"preview":"§4.2 media mix…"}' },
+    { type: "status", data: '{"status":"generating_answer"}' },
+    { type: "token", data: '{"text":"Based on the policy docs, display spend should…"}' },
+    { type: "citations", data: '{"citations":["policy.pdf p.12","playbook ch.3"]}' },
+    { type: "end", data: '{"status":"done"}' }
+  ];
+
+  sseBtn.addEventListener("click", () => {
+    if (sseRunning) return;
+    sseRunning = true;
+    clearSseTimers();
+    sseBtn.disabled = true;
+    sseLog.innerHTML = "";
+    resetFlow();
+
+    sseLog.appendChild(line("req", "&rarr; GET /api/ask/stream?q=… HTTP/1.1"));
+    sseLog.appendChild(line("req", "Authorization: Bearer &lt;token&gt;"));
+    sseLog.appendChild(line("wait", "… connection open — waiting for events"));
+
+    let elapsed = 400;
+    sseEvents.forEach((ev, i) => {
+      elapsed += sseDelay();
+      const t = setTimeout(() => {
+        const hint = sseLog.querySelector(".wait");
+        if (hint) hint.remove();
+
+        sseLog.appendChild(line("ev-line",
+          '<span class="ev-type">event: ' + ev.type + '</span><br>data: ' + ev.data));
+
+        setFlowStep(i, "active");
+        sseTimers.push(setTimeout(() => setFlowStep(i, "done"), 280));
+
+        if (ev.type === "end"){
+          sseLog.appendChild(line("closed", "stream closed successfully"));
+          sseBtn.disabled = false;
+          sseRunning = false;
+        }
+      }, elapsed);
+      sseTimers.push(t);
+    });
+  });
+})();
+</script>
 </body>
 </html>

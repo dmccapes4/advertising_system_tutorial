@@ -22,8 +22,15 @@ if (-not $isAdmin) {
         if ($Log) { $reArgs += '-Log' }   # carry the live-log flag through elevation
         Start-Process powershell -Verb RunAs -ArgumentList $reArgs
     } catch {
-        Write-Host "Permission was declined. You can still read the tutorial:" -ForegroundColor Red
-        Write-Host "just double-click  index.html  instead." -ForegroundColor Red
+        Write-Host ""
+        Write-Host "  Windows blocked Administrator access (you clicked No, or policy denied it)." -ForegroundColor Red
+        Write-Host ""
+        Write-Host "  WORKAROUND — you do not need the server:" -ForegroundColor Yellow
+        Write-Host "    Double-click  index.html  in this folder." -ForegroundColor Green
+        Write-Host "    The pre-built file from git is the full tutorial — no Python, no admin." -ForegroundColor Green
+        Write-Host ""
+        Write-Host "  To try the server again later:" -ForegroundColor DarkGray
+        Write-Host "    Right-click serve.bat -> Run as administrator -> Yes on the prompt." -ForegroundColor DarkGray
         Read-Host "Press Enter to close"
     }
     exit
@@ -57,7 +64,10 @@ try {
     Write-Host ""
     Write-Host "  Could not start the server on port $Port." -ForegroundColor Red
     Write-Host "  ($($_.Exception.Message))"
-    Write-Host "  No problem - just double-click  index.html  to read the tutorial."
+    Write-Host ""
+    Write-Host "  WORKAROUND — you do not need the server:" -ForegroundColor Yellow
+    Write-Host "    Double-click  index.html  in this folder." -ForegroundColor Green
+    Write-Host "    The pre-built file from git is the full tutorial — no port, no admin." -ForegroundColor Green
     Read-Host "  Press Enter to close"
     exit 1
 }

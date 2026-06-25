@@ -8,5 +8,7 @@ rem      time   client-IP        method  path  -> status
 rem
 rem  Great for showing "HTTP is a request, then a response" in real time.
 rem  Close the window to stop the server.
+rem
+rem  If Windows blocks admin/UAC: double-click index.html instead (pre-built in git).
 rem ===========================================================================
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0serve.ps1" -Log

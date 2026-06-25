@@ -10,122 +10,137 @@ Foundations (CCA-F)** exam. Teaches the Python needed to read Skilljar course co
 
 **Source brief:** `Python_for_CCA-F_Teaching_Brief.docx`
 
-**Build plan:** [`md/TUTORIAL_IMPLEMENTATION_PLAN.md`](md/TUTORIAL_IMPLEMENTATION_PLAN.md) — phased path from mock corpus to full MCP + Postgres + Bayesian loop.
+**Build plan:** [`md/TUTORIAL_IMPLEMENTATION_PLAN.md`](md/TUTORIAL_IMPLEMENTATION_PLAN.md)
 
-## Quick start
+---
 
-Two steps: **(1)** set up the named venv + deps for your OS, **(2)** build and read. Pick the row
-for your system — the helper scripts are idempotent (safe to re-run) and create your `.env` for you.
+## How to read the tutorial (most people — start here)
 
-> If you run into issues simply double-click index.html. The mermaid diagrams may not render, but all material will.
+**You do not need Python, a venv, or `build_reader.py` to read this tutorial.**
 
-### Step 1 — set up the venv (choose your OS)
+This repo ships with a **pre-built `index.html`** at the project root. It already contains every
+chapter, visual explainer, and the foundation quiz — fully offline, no server required.
 
-| OS / shell | Command (run from this folder) |
-|------------|--------------------------------|
+### Just open it
+
+| OS | What to do |
+|----|------------|
+| **Any** | **Double-click `index.html`** (or drag it into Chrome / Edge / Firefox / Safari) |
+
+That is the entire setup for reading. Clone or unzip the repo, open `index.html`, done.
+
+> **Mermaid diagrams:** when you open `index.html` directly (`file://`), some browsers cannot
+> load the Mermaid CDN and a few flow diagrams may show as plain text. **All prose, code, quiz,
+> and HTML explainers work.** If you need every diagram rendered, use a local server below.
+
+> **If anything else fails** (Windows admin prompt, port blocked, no Python): **still just double-click
+> `index.html`.** The pre-built file from git is complete.
+
+---
+
+## Share on Wi-Fi (optional — local server)
+
+Use a server only when you want a **"Share on Wi-Fi" link** for phones/tablets on the same
+network, or to demo HTTP live (Foundation doc). **Reading on your own machine does not require this.**
+
+| OS | Command | Notes |
+|----|---------|-------|
+| **Windows** | double-click **`serve.bat`** (quiet) or **`serve-log.bat`** (demo — prints each request) | May ask for Administrator permission to open a network port |
+| **macOS / Linux / WSL** | `./build_and_serve.sh` | Serves the pre-built `index.html`; requests log to the terminal |
+
+### Windows: Administrator / security blocked the server?
+
+`serve.bat` may open a **"Do you want to allow this app to make changes?"** (UAC) prompt. That is
+normal — it needs permission to listen on your network.
+
+**If you click No, or Windows blocks it:**
+
+1. **You do not need the server.** Double-click **`index.html`** — same tutorial, no admin, no port.
+2. To try the server again: right-click **`serve.bat`** → **Run as administrator**, then click **Yes**.
+3. If SmartScreen or your org blocks PowerShell scripts: open **`index.html`** directly (always works),
+   or run from a normal PowerShell window:
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File serve.ps1
+   ```
+4. Still stuck? **`index.html`** is the workaround. Nothing is missing from the pre-built file.
+
+---
+
+## Edit the tutorial (authors only — rebuild `index.html`)
+
+**Learners can skip this entire section.**
+
+`index.html` is generated from `md/` + `html/` by `build_reader.py`. You only need to rebuild if
+**you changed** a markdown module or HTML explainer and want those edits in the reader.
+
+```bash
+source setup_venv.sh          # once — creates named venv, installs markdown
+python build_reader.py        # writes index.html
+```
+
+Or on macOS/Linux/WSL, build and serve in one step:
+
+```bash
+chmod +x build_and_serve.sh   # once, if needed
+./build_and_serve.sh --build  # rebuild, then serve on :8000
+./build_and_serve.sh          # serve only (no rebuild) — same as git's index.html
+```
+
+| OS / shell | One-time venv setup |
+|------------|---------------------|
 | **macOS / Linux / WSL** | `source setup_venv.sh` |
 | **Windows (PowerShell)** | `. .\setup_venv.ps1` |
 
-> **Run them "sourced" / "dot-sourced"** — `source ...` on bash/zsh, `. .\...` on PowerShell —
-> so the `(aja-cca-f)` prefix sticks in your prompt. Running them plainly still builds the venv and
-> installs deps; you'd just activate manually afterward (the script prints the exact line).
+> **WSL:** if the project is on `/mnt/c/...`, `setup_venv.sh` puts the venv on `~/venvs/aja-cca-f`
+> (fast native storage). Building a venv on `/mnt/c` can take *45 minutes*; off the bridge it's seconds.
 
-> **WSL users (important):** if this project sits on a Windows drive (a `/mnt/c/...` path),
-> `setup_venv.sh` **automatically puts the venv on fast native-Linux storage** (`~/venvs/aja-cca-f`).
-> Building a venv directly on `/mnt/c` goes through WSL's slow filesystem bridge and can take
-> *45 minutes*; off the bridge it's seconds. The script handles this for you.
+---
 
-### Step 2 — build and read
+## Run the code examples (optional — Modules 3–8)
 
-```bash
-python build_reader.py            # generates index.html
-```
-
-Then **open `index.html`** in any browser — that's enough to read the whole tutorial offline.
-
-### By hand (if you'd rather see each step)
+Reading the tutorial needs **no installs**. Running live RAG / agent / MCP examples needs the venv
+plus API keys:
 
 ```bash
-# macOS / Linux / WSL
-python3 -m venv aja-cca-f                 # name it — not .venv
-source aja-cca-f/bin/activate
-pip install -r requirements.txt
-python build_reader.py
+source setup_venv.sh                              # or . .\setup_venv.ps1 on Windows
+cp .env.example .env                              # add ANTHROPIC_API_KEY
+
+python code/rag/advertising_knowledge.py "fair use in ad copy"
+python code/mcp/server.py
+python code/loop/tartaurus/run_advertising_rag.py --dry-run
+python code/schemas/bayesian_loop.py
 ```
 
-```powershell
-# Windows (PowerShell)
-python -m venv aja-cca-f
-.\aja-cca-f\Scripts\Activate.ps1
-pip install -r requirements.txt
-python build_reader.py
-```
+Dependencies: `requirements.txt` — `markdown` (build only), `anthropic` + `mcp` (live code runs).
 
-## Serving / sharing the tutorial
-
-Reading only needs `index.html` opened directly. To **serve** it (so phones/PCs on the same Wi-Fi
-can read it, or to demo HTTP live):
-
-| OS | Quiet | Live request log (demo) |
-|----|-------|--------------------------|
-| **Windows** | double-click `serve.bat` | double-click `serve-log.bat` |
-| **macOS / Linux / WSL** | `python -m http.server 8000` | `python -m http.server 8000` (logs requests by default) |
-
-`serve-log.bat` prints every page users open as they navigate — `time  client-IP  method  path -> status` —
-which is a nice live demo of "HTTP is one request, one response." Both Windows scripts show a
-"Share on Wi-Fi" link; the `serve.ps1 -Log` form is what the demo bat calls under the hood.
+---
 
 ## Modules
 
 | # | File | Topic |
 |---|------|-------|
 | — | [`md/FOUNDATION_FOR_AI_SYSTEMS.md`](md/FOUNDATION_FOR_AI_SYSTEMS.md) | **Read first** — AI systems foundation |
-| — | [`md/FOUNDATION_COMPUTER_ENGINEERING.md`](md/FOUNDATION_COMPUTER_ENGINEERING.md) | **Session 1** — ports, daemons, kernel, storage, networking, HTTP, streams |
+| — | [`md/FOUNDATION_COMPUTER_ENGINEERING.md`](md/FOUNDATION_COMPUTER_ENGINEERING.md) | **Session 1** — ports, daemons, kernel, storage, networking |
+| Q | Foundation quiz (in `index.html`) | Self-check — both foundation docs |
 | 00 | `md/00_OVERVIEW_AND_RUNNING_EXAMPLE.md` | Reframe + 10-book RAG intro |
-| 01 | `md/01_PYTHON_SURVIVAL_KIT.md` | Read Python (45 min) |
-| 02 | `md/02_DICTIONARIES_LISTS_JSON.md` | Dicts, JSON, `@dataclass` (60 min) |
-| 03 | `md/03_FUNCTIONS_TYPE_HINTS_TOOLS.md` | Functions & tools (60 min) |
-| 04 | `md/04_CONTROL_FLOW_AND_THE_AGENTIC_LOOP.md` | Agentic loop (60 min) |
-| 05 | `md/05_DECORATORS_IMPORTS_PYDANTIC.md` | OOP, decorators, Pydantic (75 min) |
-| 06 | `md/06_READING_REAL_ANTHROPIC_SDK_CODE.md` | SDK + env vars (60 min) |
-| 07 | `md/07_TEN_BOOK_RAG_WITH_TARTAURUSLOOP.md` | Full RAG + TartaurusLoop |
-| 08 | `md/08_BAYESIAN_SIX_SCHEMA_LOOP.md` | Six-schema score keeping |
+| 01–08 | `md/01_…` through `md/08_…` | Python modules + integration |
 
-```bash
-python code/rag/advertising_knowledge.py "fair use in ad copy"
-python code/mcp/server.py                        # MCP server (pip install mcp)
-python code/loop/tartaurus/run_advertising_rag.py --dry-run
-python code/schemas/bayesian_loop.py
-```
+---
 
 ## Layout
 
 ```
-README.md              # entry point (stays at root)
-md/                    # all tutorial prose (modules, foundations, manifest, plan)
-html/                  # visual explainers (right pane in index.html)
-code/                  # runnable examples
-build_reader.py        # md/ + html/ → index.html
-index.html             # offline reader (double-click or serve)
-```
-
-## Code layout
-
-```
-code/
-  rag/
-  mcp/           # Module 3 — MCP server example
-  loop/
-  schemas/       # Module 8 — six @dataclass Bayesian contracts
+README.md              # you are here
+index.html             # ← OPEN THIS (pre-built, ships in git)
+build_and_serve.sh     # macOS/Linux/WSL: serve (optional --build)
+serve.bat              # Windows: serve (optional)
+md/                    # source prose (authors edit these)
+html/                  # visual explainers
+build_reader.py        # authors only: md/ + html/ → index.html
+code/                  # runnable examples (optional)
 ```
 
 ## Legacy
 
-Prior advertising-systems engineering tutorial (Bayesian loops, graphs, decay):
-`../advertising_systems_tutorial_legacy/`
-
-## Dependencies
-
-All pinned in `requirements.txt` (installed by the Step 1 scripts above): `markdown` (builds the
-reader), `anthropic` (live Claude/TartaurusLoop runs), `mcp` (Module 3 MCP server). `anthropic` and
-`mcp` are only needed for the live code runs, not for reading the tutorial.
+Prior advertising-systems engineering tutorial:
+[`../advertising_systems_tutorial_legacy/`](../advertising_systems_tutorial_legacy/)
